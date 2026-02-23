@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Chronicle of a Life — A High Fantasy Saga</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parch: #f5eddb; --parch2: #ede0c4; --parch3: #e2d0a8; --parch4: #d4bc88;
+  --ink: #1a1208; --ink2: #2e2010; --ink3: #4a3820; --ink4: #6a5035;
+  --gold: #b8860b; --gold2: #d4a017; --gold3: #f0c040; --gold4: #f8e080;
+  --crimson: #8b1a1a; --crimson2: #c0282a; --azure: #1a3a6b; --azure2: #2a5aab;
+  --forest: #1a4a2a; --forest2: #2a7a3a; --void: #0d0a12; --void2: #1a1625;
+  --transition-speed: 0.5s;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--ink);
+  color: var(--parch);
+  font-family: 'EB Garamond', serif;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  transition: background-color var(--transition-speed);
+}
+
+#game-container {
+  width: 100%;
+  max-width: 1100px;
+  min-height: 100vh;
+  background-color: var(--parch);
+  color: var(--ink);
+  box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 80px rgba(139, 69, 19, 0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-speed);
+}
+
+/* Typography */
+h1, h2, h3, h4 { font-family: 'Cinzel Decorative', serif; font-weight: normal; text-align: center; }
+h1 { font-size: 3.5rem; color: var(--ink); margin-bottom: 0.5rem; text-shadow: 1px 1px 2px var(--parch3); }
+h2 { font-size: 2.2rem; color: var(--ink2); margin-bottom: 1.5rem; }
+h3 { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 5px; margin-bottom: 15px;}
+p { margin-bottom: 1.2rem; text-align: justify; }
+.italic { font-style: italic; color: var(--ink2); }
+.bold-flavor { font-weight: 600; color: var(--crimson); }
+.sys-text { font-family: 'Cinzel', serif; color: var(--azure); font-size: 0.95rem; text-align: center; }
+
+/* Screens & Transitions */
+.screen { display: none; padding: 40px; animation: fadeIn var(--transition-speed) ease-in-out; }
+.screen.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Title Screen */
+#title-screen { text-align: center; padding-top: 8vh; }
+.subtitle { font-family: 'Cinzel', serif; font-size: 1.2rem; letter-spacing: 3px; color: var(--ink3); margin-bottom: 30px; }
+
+.input-group { margin: 20px 0; }
+input[type="text"] {
+  background: transparent; border: none; border-bottom: 2px solid var(--ink3);
+  color: var(--ink); font-family: 'Cinzel', serif; font-size: 1.5rem;
+  text-align: center; padding: 5px; width: 300px; outline: none; transition: border-color 0.3s;
+}
+input[type="text"]:focus { border-bottom-color: var(--gold); }
+input[type="text"]::placeholder { color: rgba(74, 56, 32, 0.4); }
+
+/* Buttons */
+.btn {
+  background: transparent; border: 1px solid var(--ink3); color: var(--ink);
+  font-family: 'Cinzel', serif; font-size: 1.1rem; padding: 12px 24px;
+  cursor: pointer; transition: all 0.3s ease; margin: 10px;
+  display: inline-block; text-decoration: none;
+}
+.btn:hover { background: var(--ink); color: var(--parch); border-color: var(--ink); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.btn-primary { background: var(--ink); color: var(--parch); border: 1px solid var(--gold); }
+.btn-primary:hover { background: var(--gold); color: var(--ink); }
+
+/* Selection Grids (Lineage & Season) */
+.grid { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+.sel-card {
+  border: 1px solid var(--parch3); padding: 15px; cursor: pointer; width: 140px; text-align: center;
+  transition: 0.3s; background: var(--parch2);
+}
+.sel-card:hover { border-color: var(--ink3); transform: translateY(-3px); }
+.sel-card.sel { border-color: var(--gold); background: var(--ink); color: var(--parch); box-shadow: 0 0 10px rgba(184, 134, 11, 0.4); }
+.card-title { font-family: 'Cinzel', serif; font-size: 1.1rem; margin-bottom: 5px; }
+
+/* Main Game Layout */
+#game-layout { display: flex; flex: 1; height: 100%; }
+#sidebar {
+  width: 280px; background: var(--parch2); border-right: 2px solid var(--parch3);
+  padding: 20px; display: flex; flex-direction: column; overflow-y: auto;
+}
+#main-content { flex: 1; padding: 30px 50px; display: flex; flex-direction: column; position: relative; }
+
+/* Stats & Sidebar */
+.stat-box { margin-bottom: 20px; }
+.stat-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 1.05rem; border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 2px; }
+.stat-name { font-weight: 600; color: var(--ink2); }
+.stat-val { font-family: 'Cinzel', serif; color: var(--ink); font-weight: bold; }
+.trait-badge { display: inline-block; background: var(--ink); color: var(--parch); font-size: 0.85rem; padding: 2px 8px; border-radius: 12px; margin: 2px; font-family: 'Cinzel', serif; }
+
+/* Story Area */
+#story-text { flex: 1; margin-bottom: 30px; min-height: 40vh; }
+#story-text h2 { margin-top: 0; }
+
+/* Choices Area */
+#choices-area { display: flex; flex-direction: column; gap: 12px; margin-top: auto; border-top: 1px solid var(--parch3); padding-top: 25px; }
+.choice-btn {
+  background: var(--parch2); border: 1px solid var(--ink3); color: var(--ink);
+  padding: 16px 20px; font-family: 'EB Garamond', serif; font-size: 1.15rem;
+  text-align: left; cursor: pointer; transition: all 0.2s ease;
+  display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+}
+.choice-btn:hover { background: var(--ink); color: var(--parch); padding-left: 25px; box-shadow: 4px 4px 10px rgba(0,0,0,0.15); border-color: var(--gold); }
+.choice-meta { font-size: 0.9rem; font-style: italic; opacity: 0.8; font-family: 'Cinzel', serif; color: var(--gold); }
+
+/* Era Banner & Overlays */
+#era-banner {
+  background: var(--ink); color: var(--parch); font-family: 'Cinzel', serif;
+  text-align: center; padding: 12px; font-size: 1.1rem; letter-spacing: 1px;
+  border-bottom: 2px solid var(--gold); display: flex; justify-content: space-between; padding-left: 30px; padding-right: 30px;
+}
+#era-banner span { color: var(--gold); }
+
+#era-transition-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--ink); color: var(--gold); z-index: 1000;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; padding: 40px; opacity: 0; pointer-events: none; transition: opacity 1s;
+}
+#era-transition-overlay.active { opacity: 1; pointer-events: auto; }
+#era-transition-overlay h1 { color: var(--gold); font-size: 4rem; margin-bottom: 10px; text-shadow: none; }
+#era-transition-overlay h3 { color: var(--parch); border: none; font-size: 2rem; margin-bottom: 30px; }
+
+/* Toasts */
+#toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; gap: 10px; }
+.toast { background: var(--ink); color: var(--parch); padding: 12px 20px; border-left: 4px solid var(--gold); font-family: 'Cinzel', serif; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3); animation: slideIn 0.4s ease-out forwards; opacity: 0; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* === ASCENSION THEME === */
+body.theme-godhood { background-color: var(--void); }
+.theme-godhood #game-container { background-color: var(--void); color: var(--parch); box-shadow: 0 0 80px rgba(212, 160, 23, 0.2), inset 0 0 100px rgba(0,0,0,0.9); border: 1px solid var(--gold4); }
+.theme-godhood #sidebar { background: var(--void2); border-color: var(--gold); }
+.theme-godhood h1, .theme-godhood h2 { color: var(--gold4); text-shadow: 0 0 10px rgba(212, 160, 23, 0.5); }
+.theme-godhood .stat-name { color: var(--parch); }
+.theme-godhood .stat-val { color: var(--gold4); text-shadow: 0 0 5px var(--gold); }
+.theme-godhood .choice-btn { background: var(--void2); color: var(--gold); border-color: var(--gold); }
+.theme-godhood .choice-btn:hover { background: var(--gold); color: var(--void); }
+.theme-godhood #era-banner { background: var(--void2); border-color: var(--gold4); }
+
+@media (max-width: 800px) {
+  #game-layout { flex-direction: column; }
+  #sidebar { width: 100%; border-right: none; border-bottom: 2px solid var(--parch3); max-height: 250px; }
+  #main-content { padding: 20px; }
+  h1 { font-size: 2.5rem; }
+  #era-banner { flex-direction: column; gap: 5px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div id="game-container">
+  
+  <!-- Title Screen -->
+  <div id="title-screen" class="screen active">
+    <h1>The Chronicle<br>of a Life</h1>
+    <div class="subtitle">An Epic Tale of Magic, Love, and Ascendance</div>
+    
+    <div id="save-status-area" style="margin-bottom: 30px;">
+      <!-- Auto-populated if save exists -->
+    </div>
+
+    <div id="new-game-setup">
+      <div class="input-group">
+        <input type="text" id="pname" placeholder="Name your Character" autocomplete="off">
+      </div>
+
+      <h3 style="border:none;">Lineage</h3>
+      <div class="grid" id="lineage-grid">
+        <div class="sel-card sel" data-type="lineage" data-val="Highborn">
+          <div class="card-title">Highborn</div>
+          <div style="font-size:0.9rem;">Wealth and expectation.<br><i>(+Charisma)</i></div>
+        </div>
+        <div class="sel-card" data-type="lineage" data-val="Arcane">
+          <div class="card-title">Arcane</div>
+          <div style="font-size:0.9rem;">Born of the weave.<br><i>(+Magic)</i></div>
+        </div>
+        <div class="sel-card" data-type="lineage" data-val="Street-Cast">
+          <div class="card-title">Street-Cast</div>
+          <div style="font-size:0.9rem;">Forged in hardship.<br><i>(+Willpower)</i></div>
+        </div>
+      </div>
+
+      <h3 style="border:none; margin-top:20px;">Season of Birth</h3>
+      <div class="grid" id="season-grid">
+        <div class="sel-card sel" data-type="season" data-val="Spring">
+          <div class="card-title">Spring</div>
+        </div>
+        <div class="sel-card" data-type="season" data-val="Summer">
+          <div class="card-title">Summer</div>
+        </div>
+        <div class="sel-card" data-type="season" data-val="Autumn">
+          <div class="card-title">Autumn</div>
+        </div>
+        <div class="sel-card" data-type="season" data-val="Winter">
+          <div class="card-title">Winter</div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <button class="btn btn-primary" onclick="beginChronicle()">Begin the Chronicle</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game-screen" class="screen" style="padding:0;">
+    <div id="era-banner">
+      <div id="era-label">Act I — Infancy</div>
+      <div><span id="era-year">Year 0</span></div>
+      <div id="era-loc">Kingdom of Aelindra</div>
+    </div>
+    
+    <div id="game-layout">
+      <!-- Sidebar / Stats -->
+      <div id="sidebar">
+        <div class="stat-box">
+          <h3><span id="ui-name">Name</span></h3>
+          <div class="stat-row"><span class="stat-name">Age</span> <span class="stat-val" id="ui-age">0</span></div>
+          <div class="stat-row"><span class="stat-name">Lineage</span> <span class="stat-val" id="ui-lineage">None</span></div>
+          <div class="stat-row"><span class="stat-name">Season</span> <span class="stat-val" id="ui-season">None</span></div>
+        </div>
+        
+        <div class="stat-box">
+          <h3>Attributes</h3>
+          <div class="stat-row"><span class="stat-name">Physique</span> <span class="stat-val" id="ui-physique">0</span></div>
+          <div class="stat-row"><span class="stat-name">Agility</span> <span class="stat-val" id="ui-agility">0</span></div>
+          <div class="stat-row"><span class="stat-name">Intellect</span> <span class="stat-val" id="ui-intellect">0</span></div>
+          <div class="stat-row"><span class="stat-name">Willpower</span> <span class="stat-val" id="ui-willpower">0</span></div>
+          <div class="stat-row"><span class="stat-name">Charisma</span> <span class="stat-val" id="ui-charisma">0</span></div>
+          <div class="stat-row"><span class="stat-name">Magic</span> <span class="stat-val" id="ui-magic">0</span></div>
+        </div>
+
+        <div class="stat-box" id="relationships-box" style="display:none;">
+          <h3>Bonds</h3>
+          <div class="stat-row"><span class="stat-name">Elysia</span> <span class="stat-val" id="ui-rel-elysia">0</span></div>
+          <div class="stat-row"><span class="stat-name">Kaelen</span> <span class="stat-val" id="ui-rel-kaelen">0</span></div>
+        </div>
+
+        <div class="stat-box" id="secrets-box" style="display:none;">
+          <h3>Hidden</h3>
+          <div class="stat-row"><span class="stat-name" style="color:var(--crimson);">Forbidden Lore</span> <span class="stat-val" id="ui-forbidden">0</span></div>
+        </div>
+
+        <div class="stat-box" id="traits-box" style="display:none;">
+          <h3>Traits</h3>
+          <div id="ui-traits"></div>
+        </div>
+        
+        <div class="stat-box" id="inv-box" style="display:none;">
+          <h3>Inventory</h3>
+          <div id="ui-inv"></div>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div id="main-content">
+        <div id="story-text"></div>
+        <div id="choices-area"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Era Transition Overlay -->
+  <div id="era-transition-overlay">
+    <h1 id="trans-title">Title</h1>
+    <h3 id="trans-subtitle">Subtitle</h3>
+    <p id="trans-text" style="max-width:600px; font-size:1.3rem;">Text...</p>
+    <button class="btn btn-primary" id="trans-btn" style="margin-top:40px;">Continue</button>
+  </div>
+
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+/* =========================================
+   GAME ENGINE & STATE MANAGEMENT
+========================================= */
+
+let C = {};
+let currentArc = 'infancy';
+let arcIndex = 0;
+let _overrideScene = null;
+
+// UI Selection Logic
+document.querySelectorAll('.sel-card').forEach(card => {
+  card.addEventListener('click', function() {
+    let type = this.dataset.type;
+    document.querySelectorAll(`.sel-card[data-type="${type}"]`).forEach(c => c.classList.remove('sel'));
+    this.classList.add('sel');
+  });
+});
+
+function initCharacter(name, lineage, season) {
+  C = {
+    name: name, lineage: lineage, season: season, age: 0, era: 'Infancy', hubMonth: 1, hubMessage: "", romance: null,
+    stats: { physique: 5, agility: 5, intellect: 5, willpower: 5, charisma: 5, magic: 5, forbiddenLore: 0 },
+    traits: [], inventory: [], relationships: { elysia: 0, kaelen: 0 }
+  };
+  
+  if(lineage === 'Highborn') C.stats.charisma += 5;
+  if(lineage === 'Arcane') C.stats.magic += 5;
+  if(lineage === 'Street-Cast') C.stats.willpower += 5;
+}
+
+/* --- SAVE / LOAD SYSTEM (100% OFFLINE) --- */
+function saveGame() {
+  const saveData = { C: C, currentArc: currentArc, arcIndex: arcIndex };
+  localStorage.setItem('chronicle_save', JSON.stringify(saveData));
+}
+
+function loadGame() {
+  const saved = localStorage.getItem('chronicle_save');
+  if (saved) {
+    const data = JSON.parse(saved);
+    C = data.C;
+    currentArc = data.currentArc;
+    arcIndex = data.arcIndex;
+    
+    document.getElementById('title-screen').style.display = 'none';
+    document.getElementById('game-screen').style.display = 'block';
+    updateUI();
+    
+    // Routing logic for dynamic Hub vs Linear
+    if (C.era === 'Academy Hub') {
+      runAcademyHub();
+    } else {
+      renderScene(storyData[currentArc][arcIndex]);
+    }
+  }
+}
+
+function checkSavedGame() {
+  const saved = localStorage.getItem('chronicle_save');
+  if (saved) {
+    document.getElementById('save-status-area').innerHTML = `
+      <div style="background:var(--parch2); border:1px solid var(--gold); padding:20px; border-radius:8px;">
+        <p style="color:var(--forest); font-family:'Cinzel', serif; font-size:1.2rem; margin-bottom:10px;">A chronicle remains written in the weave...</p>
+        <button class="btn btn-primary" onclick="loadGame()">Continue Chronicle</button>
+        <p style="font-size:0.9rem; margin-top:15px; color:var(--ink3);">Or begin anew below (this will overwrite your previous save).</p>
+      </div>
+    `;
+  }
+}
+
+function beginChronicle() {
+  const nameInput = document.getElementById('pname').value.trim();
+  const name = nameInput !== "" ? nameInput : "Aelin";
+  const lin = document.querySelector('.sel-card.sel[data-type="lineage"]').dataset.val;
+  const sea = document.querySelector('.sel-card.sel[data-type="season"]').dataset.val;
+  
+  initCharacter(name, lin, sea);
+  document.getElementById('title-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  currentArc = 'infancy';
+  arcIndex = 0;
+  
+  showEraTransition('Act I', 'Infancy', 'Every great life begins the same way. Not with a destiny — those are written later, in retrospect, by people who weren\'t there. It begins with a single breath.', () => {
+    updateUI();
+    renderScene(storyData[currentArc][arcIndex]);
+    saveGame();
+  });
+}
+
+function updateUI() {
+  document.getElementById('ui-name').innerText = C.name;
+  document.getElementById('ui-age').innerText = C.age;
+  document.getElementById('ui-lineage').innerText = C.lineage;
+  document.getElementById('ui-season').innerText = C.season;
+  
+  document.getElementById('ui-physique').innerText = C.stats.physique;
+  document.getElementById('ui-agility').innerText = C.stats.agility;
+  document.getElementById('ui-intellect').innerText = C.stats.intellect;
+  document.getElementById('ui-willpower').innerText = C.stats.willpower;
+  document.getElementById('ui-charisma').innerText = C.stats.charisma;
+  document.getElementById('ui-magic').innerText = C.stats.magic;
+
+  // Dynamic UI elements based on Age/Era
+  if (C.age >= 14 || C.era === 'Academy Hub') {
+    document.getElementById('relationships-box').style.display = 'block';
+    document.getElementById('ui-rel-elysia').innerText = C.relationships.elysia;
+    document.getElementById('ui-rel-kaelen').innerText = C.relationships.kaelen;
+  }
+  if (C.stats.forbiddenLore > 0) {
+    document.getElementById('secrets-box').style.display = 'block';
+    document.getElementById('ui-forbidden').innerText = C.stats.forbiddenLore;
+  }
+  
+  if (C.traits.length > 0) {
+    document.getElementById('traits-box').style.display = 'block';
+    document.getElementById('ui-traits').innerHTML = C.traits.map(t => `<span class="trait-badge">${t}</span>`).join('');
+  }
+  if (C.inventory.length > 0) {
+    document.getElementById('inv-box').style.display = 'block';
+    document.getElementById('ui-inv').innerHTML = C.inventory.map(i => `<div style="font-size:0.95rem;">• ${i}</div>`).join('');
+  }
+
+  // Era Banner
+  document.getElementById('era-label').innerText = C.era;
+  let timeStr = `Age ${C.age}`;
+  if (C.era === 'Academy Hub') {
+    let y = Math.ceil(C.hubMonth/12); let m = ((C.hubMonth-1)%12)+1;
+    timeStr = `Year ${y} (Month ${m})`;
+  } else if (C.era === 'Godhood') {
+    timeStr = 'Eternity';
+  }
+  document.getElementById('era-year').innerText = timeStr;
+
+  // Godhood theme application
+  if (C.era === 'Godhood') document.body.classList.add('theme-godhood');
+  else document.body.classList.remove('theme-godhood');
+}
+
+function showToast(msg) {
+  const container = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerText = msg;
+  container.appendChild(t);
+  setTimeout(() => { t.style.opacity = 0; t.style.transition = "opacity 0.5s"; setTimeout(()=>t.remove(),500); }, 3000);
+}
+
+function addTrait(trait) { if(!C.traits.includes(trait)){ C.traits.push(trait); showToast("Trait Gained: " + trait); } }
+function addInv(item) { if(!C.inventory.includes(item)){ C.inventory.push(item); showToast("Item Acquired: " + item); } }
+
+function showEraTransition(title, subtitle, text, callback) {
+  const overlay = document.getElementById('era-transition-overlay');
+  document.getElementById('trans-title').innerText = title;
+  document.getElementById('trans-subtitle').innerText = subtitle;
+  document.getElementById('trans-text').innerText = text;
+  overlay.classList.add('active');
+  
+  const btn = document.getElementById('trans-btn');
+  btn.onclick = function() {
+    overlay.classList.remove('active');
+    if(callback) setTimeout(callback, 500);
+  };
+}
+
+function advanceScene() {
+  arcIndex++;
+  if (arcIndex >= storyData[currentArc].length) {
+    // End of arc handling
+    if (currentArc === 'infancy') {
+      currentArc = 'childhood'; arcIndex = 0; C.era = 'Childhood'; C.age = 5;
+      showEraTransition('Act II', 'Childhood', 'The hazy warmth of infancy gives way to the sharp, vibrant colors of the world. You learn to walk, to speak, and to realize the world is much larger than the walls of your home.', () => { updateUI(); renderScene(storyData[currentArc][arcIndex]); saveGame(); });
+      return;
+    } else if (currentArc === 'childhood') {
+      currentArc = 'academy_intro'; arcIndex = 0; C.era = 'The Arcanum'; C.age = 14;
+      showEraTransition('Act III', 'The Academy', 'You have been summoned. The ancient spires of the Aelindran Arcanum await to forge your raw potential into something formidable.', () => { updateUI(); renderScene(storyData[currentArc][arcIndex]); saveGame(); });
+      return;
+    } else if (currentArc === 'academy_intro') {
+      // Transition to Hub Engine
+      runAcademyHub();
+      return;
+    } else if (currentArc === 'war') {
+      currentArc = 'reckoning'; arcIndex = 0;
+      renderScene(storyData[currentArc][arcIndex]);
+      saveGame();
+      return;
+    }
+  } else {
+    renderScene(storyData[currentArc][arcIndex]);
+    saveGame();
+  }
+}
+
+function renderScene(scene) {
+  updateUI();
+  const textDiv = document.getElementById('story-text');
+  textDiv.style.opacity = 0;
+  
+  setTimeout(() => {
+    let html = `<h2>${scene.title}</h2>`;
+    html += typeof scene.text === 'function' ? scene.text() : scene.text;
+    textDiv.innerHTML = html;
+    textDiv.style.opacity = 1;
+    
+    const choicesDiv = document.getElementById('choices-area');
+    choicesDiv.innerHTML = '';
+
+    const choices = typeof scene.choices === 'function' ? scene.choices() : scene.choices;
+    
+    choices.forEach(choice => {
+      if (choice.condition && !choice.condition()) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      
+      let innerHtml = `<span>${choice.text}</span>`;
+      if (choice.meta) innerHtml += `<span class="choice-meta">${choice.meta}</span>`;
+      btn.innerHTML = innerHtml;
+
+      btn.onclick = () => {
+        if (choice.effect) choice.effect();
+        if (choice.next) {
+           // Custom routing bypasses standard advanceScene
+           renderScene(sceneRouting[choice.next]);
+           saveGame();
+        } else if (scene.isHub) {
+           // If it's a hub scene, calling effect() already calls runAcademyHub
+        } else {
+           advanceScene();
+        }
+      };
+      choicesDiv.appendChild(btn);
+    });
+  }, 300);
+}
+
+
+/* =========================================
+   THE ACADEMY HUB ENGINE (The 48-Month Loop)
+========================================= */
+
+const flavor_study = [
+  "You spend the month poring over dusty grimoires in the Arcanum's eastern wing. The scent of ozone and old parchment fills your lungs.",
+  "Professor Vane's lectures on elemental weaving leave you exhausted, but you feel the magic humming more fiercely in your veins.",
+  "Late nights in the practice yard practicing incantations. You manage to shatter a solid oak dummy with a concussive blast.",
+  "You focus on the theoretical aspects of magical theory. The mathematical precision of spellcraft begins to make sense."
+];
+const flavor_elysia = [
+  "You find Elysia studying by the grand windows. She barely looks up, but she shifts her books to make room for you. A quiet, comfortable silence falls between you.",
+  "Elysia corrects your wand posture during a practical exam. 'You're sloppy,' she mutters, though her fingers linger against your wrist just a second longer than necessary.",
+  "You spend an evening discussing magical theory with Elysia. For a brief moment, her guarded exterior cracks, and she laughs at a joke you make. It's a beautiful sound.",
+  "Elysia shares a rare, theoretical text with you. 'Don't ruin the spine,' she warns, but her eyes betray a deep trust."
+];
+const flavor_kaelen = [
+  "Kaelen corners you in the hallway, spinning a silver coin across his knuckles. 'Care to ditch classes and sneak into the lower city?' he grins. You spend the day drinking spiced cider and laughing.",
+  "You find Kaelen brooding on the astronomy tower. He opens up, just a little, about the suffocating pressure of his noble house. You sit shoulder-to-shoulder in the cold air.",
+  "During dueling practice, Kaelen purposely takes a fall to make you look good in front of the instructors. He winks at you from the dirt.",
+  "You and Kaelen share a quiet moment in the courtyard. He casually brushes a leaf from your hair, his gaze dropping momentarily to your lips before he steps back with a smirk."
+];
+const flavor_sneak = [
+  "You slip past the prefects and enter the Restricted Archives. You find a crumbling tome detailing entities that existed before the recorded gods.",
+  "In the deepest, forgotten basement of the academy, you find a symbol carved into the stone—an eye weeping black blood. Staring at it gives you a migraine, but expands your mind.",
+  "You overhear two senior professors speaking in hushed, terrified tones about 'The Awakening.' When they leave, you find a dropped note written in ancient celestial script.",
+  "You uncover a sealed section of the library. Reading the forbidden texts within, you feel a dark, ancient presence brushing against your consciousness."
+];
+function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function runAcademyHub() {
+  C.era = 'Academy Hub';
+  C.age = 14 + Math.floor((C.hubMonth - 1) / 12);
+  
+  // Intercept for Milestones
+  if (C.hubMonth === 12) return triggerMilestone('year1_finale');
+  if (C.hubMonth === 24) return triggerMilestone('year2_winter_ball');
+  if (C.hubMonth === 36) return triggerMilestone('year3_cult_attack');
+  if (C.hubMonth === 48) return triggerMilestone('year4_graduation');
+
+  updateUI();
+  saveGame();
+
+  let year = Math.ceil(C.hubMonth / 12);
+  let month = ((C.hubMonth - 1) % 12) + 1;
+
+  let txt = `<p><b>Year ${year}, Month ${month}</b></p>`;
+  if (C.hubMessage) {
+    txt += `<p class="italic">"${C.hubMessage}"</p>`;
+    C.hubMessage = "";
+  } else {
+    txt += `<p>The sprawling academy is alive with arcane energy. The demands of your professors are grueling, but you have carved out a sliver of free time. How will you spend it?</p>`;
+  }
+
+  _overrideScene = {
+    title: "The Halls of the Arcanum",
+    isHub: true,
+    text: txt,
+    choices: [
+      { text: "Study Magic & Attend Classes", meta: "+Magic", effect: () => { C.stats.magic += 2; C.hubMonth++; C.hubMessage = getRandom(flavor_study); showToast("+2 Magic"); runAcademyHub(); } },
+      { text: "Seek out Elysia", meta: "+Affection", effect: () => { C.relationships.elysia += 3; C.hubMonth++; C.hubMessage = getRandom(flavor_elysia); showToast("Grew closer to Elysia"); runAcademyHub(); } },
+      { text: "Find Kaelen", meta: "+Affection", effect: () => { C.relationships.kaelen += 3; C.hubMonth++; C.hubMessage = getRandom(flavor_kaelen); showToast("Grew closer to Kaelen"); runAcademyHub(); } },
+      { text: "Sneak into Restricted Archives", meta: "+Forbidden Lore", effect: () => { C.stats.forbiddenLore += 2; C.hubMonth++; C.hubMessage = getRandom(flavor_sneak); showToast("+2 Forbidden Lore"); runAcademyHub(); } }
+    ]
+  };
+  renderScene(_overrideScene);
+}
+
+function triggerMilestone(id) {
+  _overrideScene = sceneRouting[id];
+  renderScene(_overrideScene);
+}
+
+
+/* =========================================
+   STORY DATA (Infancy, Childhood, War, Ascension)
+========================================= */
+
+const storyData = {
+  infancy: [
+    {
+      title: "The First Breath",
+      text: "<p>The world is a blur of shapes and overwhelming sounds. The warmth of the hearth nearby contrasts with the cool draft of the room.</p><p>As an infant, your choices are limited, but your innate disposition begins to form. When your mother lays you in your crib, what is your first reaction to the sprawling, confusing world?</p>",
+      choices: [
+        { text: "Cry out loudly, demanding attention.", meta: "+Charisma", effect: () => { C.stats.charisma += 2; addTrait("Vocal"); } },
+        { text: "Stare quietly at the dancing shadows.", meta: "+Intellect", effect: () => { C.stats.intellect += 2; addTrait("Observant"); } },
+        { text: "Kick and thrash against the blankets.", meta: "+Physique", effect: () => { C.stats.physique += 2; addTrait("Energetic"); } }
+      ]
+    },
+    {
+      title: "The Shadow in the Room",
+      text: "<p>It is the middle of the night. A storm rages outside. In the flashes of lightning, you notice a strange, elongated shadow cast upon your wall that doesn't match the furniture.</p><p>It seems to writhe slightly, detached from the physical world. A faint, cold humming fills the room.</p>",
+      choices: [
+        { text: "Reach out toward the dark energy.", meta: "+Magic, +Forbidden Lore", effect: () => { C.stats.magic += 2; C.stats.forbiddenLore += 1; addTrait("Void-Touched"); } },
+        { text: "Squeeze your eyes shut and endure.", meta: "+Willpower", effect: () => { C.stats.willpower += 3; } }
+      ]
+    },
+    {
+      title: "The Toy Chest",
+      text: "<p>You are a toddler now, capable of crawling and grasping. Your father places a wooden chest before you, filled with family heirlooms and discarded toys.</p><p>Which object do you instinctively pull from the pile?</p>",
+      choices: [
+        { text: "A heavy, wooden training sword.", meta: "+Physique, +Item", effect: () => { C.stats.physique += 2; addInv("Wooden Sword"); } },
+        { text: "An intricately carved, mysterious puzzle box.", meta: "+Intellect, +Item", effect: () => { C.stats.intellect += 2; addInv("Puzzle Box"); } },
+        { text: "A polished, reflective silver mirror.", meta: "+Charisma, +Item", effect: () => { C.stats.charisma += 2; addInv("Silver Mirror"); } }
+      ]
+    }
+  ],
+
+  childhood: [
+    {
+      title: "The Village Outskirts",
+      text: "<p>You are older now, running freely through the streets of your settlement. Beyond the safety of the houses lies the Whispering Woods, strictly forbidden to children.</p><p>One afternoon, you hear a strange, melodic humming coming from the tree line.</p>",
+      choices: [
+        { text: "Venture into the woods to find the source.", meta: "+Willpower, +Agility", effect: () => { C.stats.willpower += 2; C.stats.agility += 2; addTrait("Brave"); } },
+        { text: "Stay back, but observe carefully from a distance.", meta: "+Intellect", effect: () => { C.stats.intellect += 3; } }
+      ]
+    },
+    {
+      title: "The Wandering Mage",
+      text: "<p>A traveling arcanist visits your town. He sets up a small stall, performing minor cantrips for coin. While others are dazzled by the flashes of light, you feel a strange resonance in your chest.</p><p>When he drops a glowing crystalline prism, you pick it up.</p>",
+      choices: [
+        { text: "Hand it back politely.", meta: "+Charisma", effect: () => { C.stats.charisma += 3; } },
+        { text: "Try to channel your own energy into it.", meta: "+Magic", effect: () => { 
+            C.stats.magic += 4; 
+            showToast("The crystal flares brilliantly!");
+            addTrait("Arcane Spark");
+        }}
+      ]
+    },
+    {
+      title: "The Letter",
+      text: "<p>You are thirteen. A raven with silver-tipped wings lands on your windowsill, bearing a thick parchment sealed with purple wax.</p><p>It is a summons to the Aelindran Arcanum. Your latent talents have been recognized. Your childhood is officially over; you must pack your things and leave for the capital tomorrow.</p>",
+      choices: [
+        { text: "Accept your destiny.", effect: () => { C.age = 14; } }
+      ]
+    }
+  ],
+
+  academy_intro: [
+    {
+      title: "Arrival at the Arcanum",
+      text: "<p>The iron gates of the Aelindran Arcanum loom before you, ancient and unforgiving. As a youth showing a spark of the arcane, you are here to be forged into a weapon for the Kingdom.</p><p>As you step into the grand courtyard, two figures immediately catch your eye. One is a girl with striking silver hair, deep in a heavy tome, ignoring the bustling crowds. The other is a boy wearing the crest of a high noble house, leaning against a statue and charming a group of first-years.</p>",
+      choices: [
+        { text: "Approach the silver-haired girl.", meta: "+Elysia", effect: () => { C.relationships.elysia += 5; } },
+        { text: "Approach the noble boy.", meta: "+Kaelen", effect: () => { C.relationships.kaelen += 5; } },
+        { text: "Ignore them and find your dormitory.", meta: "+Willpower", effect: () => { C.stats.willpower += 2; } }
+      ]
+    },
+    {
+      title: "The First Term",
+      text: "<p>You find your quarters in the sprawling stone dormitories. The sheer weight of history in this place is palpable. The next four years will define the rest of your life.</p>",
+      choices: [
+        { text: "Begin your studies.", effect: () => { /* Transition handled in advanceScene */ } }
+      ]
+    }
+  ],
+
+  war: [
+    {
+      title: "Act IV: The Bloodstained Fields",
+      text: () => `<p>The mud of the trenches clings to your boots. It has been months of grueling, brutal conflict. The Empire, fueled by the same dark cult you faced at the Academy, has brought Aelindra to its knees. You are commanding a squad—your 'Pack'—consisting of your closest allies.</p>
+      ${C.romance === "Elysia" ? "<p>Elysia is by your side, her silver hair stained with ash, but her magic as precise and deadly as ever. In the quiet moments, her touch is the only thing keeping you sane.</p>" : ""}
+      ${C.romance === "Kaelen" ? "<p>Kaelen's aristocratic arrogance has been replaced by a grim, lethal efficiency. He guards your back fiercely. At night, in the war tent, his embrace is desperate and clinging.</p>" : ""}
+      <p>Tomorrow, the final push against the Empire's dark citadel begins.</p>`,
+      choices: [
+        { text: "Give a rousing speech to your pack.", meta: "+Charisma", effect: () => { C.stats.charisma += 15; } },
+        { text: "Spend the night deep in meditation.", meta: "+Magic", effect: () => { C.stats.magic += 15; } },
+        { text: "Read the dark tome you've kept hidden.", meta: "+Forbidden Lore", effect: () => { C.stats.forbiddenLore += 30; } }
+      ]
+    }
+  ],
+
+  reckoning: [
+    {
+      title: "The Pack Reckoning",
+      text: "<p>The battle is a massacre. The sky rains fire. Your pack fights valiantly, but the Empire has unleashed a towering Behemoth of pure void energy. It slaughters the vanguard in seconds.</p><p>Kaelen is thrown violently against a barricade. Elysia's shields are cracking under the pressure. The Kingdom's army is breaking.</p><p>To save them, to save everyone, you realize what you must do. The Forbidden Lore you studied wasn't just history—it was an instruction manual for ascension. A way to mantle the power of the Old Gods.</p>",
+      choices: [
+        { text: "Embrace the Forbidden Arts. Ascend.", meta: "Requires 40+ Forbidden Lore", condition: () => C.stats.forbiddenLore >= 40, next: "ascension_start" },
+        { text: "Rely on raw Willpower and mortal Magic.", next: "mortal_stand" }
+      ]
+    }
+  ]
+};
+
+// Routing for non-linear jumps (Milestones and Endings)
+const sceneRouting = {
+  // --- ACADEMY MILESTONES ---
+  year1_finale: {
+    title: "Year 1 Finale: The Restricted Incident",
+    text: "<p>The final night of your first year. A terrible scream echoes from the library's Restricted Section. You arrive to find a massive, shadowy rift tearing through the bookshelves. A student lies unconscious, dark energy siphoning from their chest.</p>",
+    choices: [
+      { text: "Blast the rift with raw magic!", effect: () => { C.stats.magic += 5; C.hubMonth++; showToast("Rift destroyed"); runAcademyHub(); } },
+      { text: "Observe the rift. Memorize its ancient runes.", effect: () => { C.stats.forbiddenLore += 8; C.hubMonth++; showToast("Dark knowledge gained", "void"); runAcademyHub(); } }
+    ]
+  },
+  year2_winter_ball: {
+    title: "Year 2: The Winter Ball",
+    text: "<p>The Grand Hall is transformed into a palace of ice and floating lights. It is the height of your second year. You stand at the edge of the dance floor. Across the room, you see Elysia in a stunning silver gown. Near the punch bowl, Kaelen is holding court, dressed in immaculate dark velvet.</p>",
+    choices: () => {
+      let opts = [];
+      if (C.relationships.elysia >= 15) opts.push({ text: "Ask Elysia to dance.", next: "ball_elysia" });
+      if (C.relationships.kaelen >= 15) opts.push({ text: "Approach Kaelen.", next: "ball_kaelen" });
+      opts.push({ text: "Slip away to the library to study alone.", effect: () => { C.stats.forbiddenLore += 5; C.hubMonth++; showToast("Avoided the crowds"); runAcademyHub(); } });
+      return opts;
+    }
+  },
+  ball_elysia: {
+    title: "Under the Floating Lights",
+    text: "<p>You offer your hand to Elysia. She hesitates, a flush rising on her cheeks, before taking it. As you sway to the music, the distance between you vanishes.</p><p>'I hate these events,' she murmurs. 'But... I don't hate being here with you.'</p><p>You lean in, and your lips meet in a tender, quiet kiss.</p>",
+    choices: [{ text: "Hold her close.", effect: () => { C.romance = "Elysia"; C.hubMonth++; runAcademyHub(); } }]
+  },
+  ball_kaelen: {
+    title: "A Private Alcove",
+    text: "<p>Kaelen pulls you flush against him, leading you across the floor with practiced grace. 'You look breathtaking,' he whispers. He pulls you into a secluded alcove away from prying eyes, pressing you against the cool stone wall and kissing you—fierce, desperate, and intoxicating.</p>",
+    choices: [{ text: "Kiss him back.", effect: () => { C.romance = "Kaelen"; C.hubMonth++; runAcademyHub(); } }]
+  },
+  year3_cult_attack: {
+    title: "Year 3: The Cult's Strike",
+    text: "<p>An ordinary Tuesday turns into a nightmare. Cultists clad in void-black robes breach the academy wards wielding the Forbidden Arts. Screams fill the courtyard. You see a professor fall to a sickening green curse.</p>",
+    choices: [
+      { text: "Rally the students and fight back! (Magic > 30)", condition: () => C.stats.magic > 30, effect: () => { C.stats.charisma += 10; C.hubMonth++; showToast("Hero of the Arcanum"); runAcademyHub(); } },
+      { text: "Use dark runes to counter them! (Lore > 15)", condition: () => C.stats.forbiddenLore > 15, effect: () => { C.stats.forbiddenLore += 15; C.hubMonth++; showToast("Terrifying power unleashed", "void"); runAcademyHub(); } },
+      { text: "Flee and protect your friends.", effect: () => { C.stats.willpower += 10; C.hubMonth++; showToast("Survived"); runAcademyHub(); } }
+    ]
+  },
+  year4_graduation: {
+    title: "Year 4: Graduation & War",
+    text: "<p>There is no grand ceremony. On the day you are meant to graduate, the sky turns the color of a bruised plum. The warning bells of the capital ring out across the valleys. The Kingdom has been invaded.</p><p>The King has drafted all academy graduates immediately to the front lines. You are no longer a student. You are a weapon.</p>",
+    choices: [
+      { text: "March to the front lines.", effect: () => { 
+        C.era = "War"; 
+        currentArc = "war"; 
+        arcIndex = 0; 
+        showEraTransition('Act IV', 'The Bloodstained Fields', 'The innocence of youth dies in the mud. You are thrust into a war that will determine the fate of the world.', () => { updateUI(); renderScene(storyData[currentArc][arcIndex]); saveGame(); });
+      }}
+    ]
+  },
+
+  // --- FINALE ROUTES ---
+  mortal_stand: {
+    title: "The Mortal Stand",
+    text: "<p>You refuse the dark temptation. You channel every ounce of your being, your life force burning like a star. You unleash a wave of pure, blinding arcane light.</p><p>The Behemoth shatters. The enemy lines break. But the cost is immense. Your magic circuits burn out completely.</p><p>You survive. Aelindra wins the war. But you will never cast a spell again.</p>",
+    choices: [{ text: "Conclude your Chronicle", next: "epilogue_mortal" }]
+  },
+  epilogue_mortal: {
+    title: "Epilogue: The Quiet Hero",
+    text: "<p>You sit by the fire in a small cottage, far from the capital. The war is a memory. You gave up your magic, but you saved your soul and your friends.</p><p>A mortal life. A beautiful life.</p><p class='bold-flavor' style='text-align:center; margin-top:30px;'>--- THE END ---</p>",
+    choices: []
+  },
+  ascension_start: {
+    title: "Act V: Apotheosis",
+    text: "<p>You drop your mortal barriers. You let the abyss in. The archaic syllables tear from your throat, vibrating with a frequency that cracks reality itself.</p><p>The battlefield freezes. The rain stops in mid-air. Your physical body begins to dissolve, replaced by a silhouette of pulsing cosmic gold and infinite void.</p><p>Elysia and Kaelen look up at you, not with relief, but with absolute awe... and terror. You are no longer human. You are the Weaver.</p>",
+    choices: [{ text: "Annihilate the enemy army.", effect: () => { C.era = "Godhood"; updateUI(); }, next: "ascension_judgment" }]
+  },
+  ascension_judgment: {
+    title: "The Divine Decree",
+    text: "<p>With a mere thought, the enemy army ceases to exist. They are not killed; they are simply unwritten from reality. They blow away like dust in the wind.</p><p>The war is over in a heartbeat. Now, boundless power hums in your formless hands. The Kingdom of Aelindra bows before you.</p><p>What is your divine decree?</p>",
+    choices: [
+      { text: "Rule the world as a strict, benevolent deity.", next: "epilogue_god_ruler" },
+      { text: "Erase magic from the world, then depart to the stars.", next: "epilogue_god_departure" }
+    ]
+  },
+  epilogue_god_ruler: {
+    title: "Epilogue: The Eternal Sovereign",
+    text: () => `<p>You cast your shadow over the world. Aelindra enters a golden age of enforced peace. No wars are fought, for you crush dissent before it is spoken.</p>
+      ${C.romance ? `<p>You elevate ${C.romance} to stand by your side, making them immortal. But over the centuries, the human light in their eyes fades, replaced by the cold reflection of your own divinity.</p>` : "<p>You sit upon a throne of starlight, entirely alone.</p>"}
+      <p>You saved the world, but you took its freedom.</p><p class='bold-flavor' style='text-align:center; margin-top:30px; color:var(--gold);'>--- ASCENDED ---</p>`,
+    choices: []
+  },
+  epilogue_god_departure: {
+    title: "Epilogue: The Silent Sacrifice",
+    text: () => `<p>You reach into the planetary weave and pull the threads of magic out by their roots. Magic dies. The world becomes mundane, safe, and ordinary.</p>
+      ${C.romance ? `<p>Before you depart into the infinite cosmos, you visit ${C.romance} one last time in their dreams. You leave them with a profound sense of peace, and the memory of the human you once were.</p>` : ""}
+      <p>You drift away into the void, a silent guardian of a world that will eventually forget you existed.</p><p class='bold-flavor' style='text-align:center; margin-top:30px; color:var(--gold);'>--- TRANSCENDED ---</p>`,
+    choices: []
+  }
+};
+
+// Start Up
+window.onload = checkSavedGame;
+
+</script>
+</body>
+</html>
