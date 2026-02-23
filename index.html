@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Chronicle of a Life — A High Fantasy Saga</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parch:#f5eddb;--parch2:#ede0c4;--parch3:#e2d0a8;--parch4:#d4bc88;
+  --ink:#1a1208;--ink2:#2e2010;--ink3:#4a3820;--ink4:#6a5035;
+  --gold:#b8860b;--gold2:#d4a017;--gold3:#f0c040;--gold4:#f8e080;
+  --crimson:#8b1a1a;--crimson2:#c0282a;--azure:#1a3a6b;--azure2:#2a5aab;
+  --forest:#1a4a2a;--forest2:#2a7a3a;--shadow:rgba(26,18,8,0.15);--border-ink:rgba(90,68,32,0.3);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--parch2);color:var(--ink);font-family:'EB Garamond',Georgia,serif;font-size:17px;line-height:1.75;min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E") repeat,radial-gradient(ellipse at 30% 20%,rgba(212,188,136,0.3) 0%,transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(184,134,11,0.15) 0%,transparent 60%);pointer-events:none;z-index:0;}
+#app{position:relative;z-index:1;}
+#title-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;position:relative;}
+#title-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(240,192,64,0.12) 0%,transparent 70%);}
+.title-ornament{font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:8px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;opacity:0.8;}
+.game-title-main{font-family:'Cinzel Decorative',cursive;font-size:clamp(2rem,6vw,3.8rem);color:var(--ink);line-height:1.2;margin-bottom:8px;text-shadow:2px 2px 0 rgba(184,134,11,0.2);}
+.game-title-main::after{content:'';display:block;width:80%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:14px auto 0;}
+.game-title-sub{font-family:'Cinzel',serif;font-size:0.95rem;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-top:16px;margin-bottom:40px;}
+.title-verse{font-style:italic;color:var(--ink3);font-size:1rem;max-width:480px;line-height:1.9;margin-bottom:50px;padding:20px 30px;border-left:2px solid var(--gold2);border-right:2px solid var(--gold2);position:relative;}
+.title-verse::before,.title-verse::after{content:'✦';position:absolute;color:var(--gold2);font-size:0.8rem;}
+.title-verse::before{top:8px;left:50%;transform:translateX(-50%);}
+.title-verse::after{bottom:8px;left:50%;transform:translateX(-50%);}
+.creation-parchment{background:var(--parch);border:1px solid var(--parch4);box-shadow:0 4px 30px rgba(26,18,8,0.2),inset 0 0 60px rgba(184,134,11,0.05);max-width:560px;width:100%;padding:40px;position:relative;}
+.creation-parchment::before{content:'';position:absolute;inset:8px;border:1px solid rgba(184,134,11,0.25);pointer-events:none;}
+.creation-parchment::after{content:'';position:absolute;inset:12px;border:1px solid rgba(184,134,11,0.12);pointer-events:none;}
+.cr-heading{font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:6px;}
+.cr-title{font-family:'Uncial Antiqua',cursive;font-size:1.6rem;color:var(--ink);text-align:center;margin-bottom:24px;}
+.cr-divider{text-align:center;color:var(--gold2);font-size:0.9rem;letter-spacing:6px;margin:16px 0;}
+.cr-field{margin-bottom:20px;}
+.cr-label{display:block;font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;}
+.cr-input{width:100%;background:rgba(255,255,255,0.4);border:none;border-bottom:1px solid var(--parch4);color:var(--ink);padding:8px 4px;font-family:'EB Garamond',serif;font-size:1.1rem;outline:none;transition:border-color 0.2s;border-radius:0;}
+.cr-input:focus{border-bottom-color:var(--gold2);}
+.lineage-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.lineage-card{padding:12px;border:1px solid var(--parch4);background:rgba(255,255,255,0.25);cursor:pointer;transition:all 0.2s;}
+.lineage-card:hover,.lineage-card.sel{border-color:var(--gold2);background:rgba(212,160,23,0.08);}
+.lineage-card.sel{border-color:var(--gold);}
+.lc-name{font-family:'Cinzel',serif;font-size:0.88rem;color:var(--ink);margin-bottom:3px;}
+.lc-desc{font-size:0.78rem;color:var(--ink4);font-style:italic;line-height:1.4;}
+.lc-bonus{font-size:0.7rem;color:var(--gold);font-family:'Cinzel',serif;margin-top:5px;letter-spacing:0.5px;}
+.cr-btn{width:100%;padding:14px;background:var(--ink);border:1px solid var(--gold);color:var(--gold3);font-family:'Cinzel',serif;font-size:0.88rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all 0.25s;margin-top:20px;}
+.cr-btn:hover{background:var(--gold);color:var(--ink);letter-spacing:4px;}
+#game-screen{display:none;min-height:100vh;}
+.era-banner{background:var(--ink);color:var(--gold3);text-align:center;padding:10px 20px;font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:8px;text-transform:uppercase;position:sticky;top:0;z-index:50;}
+.era-banner span{color:var(--parch4);margin:0 20px;font-size:0.65rem;}
+.game-body{display:grid;grid-template-columns:1fr 300px;gap:0;max-width:1200px;margin:0 auto;padding:24px 20px;align-items:start;}
+.narrative-panel{padding-right:28px;}
+.scene-header{margin-bottom:24px;}
+.scene-location{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.scene-title{font-family:'Uncial Antiqua',cursive;font-size:1.9rem;color:var(--ink);line-height:1.2;margin-bottom:10px;}
+.scene-title-line{width:100%;height:1px;background:linear-gradient(90deg,var(--gold2),var(--parch4),transparent);margin-bottom:18px;}
+.story-text{font-size:1.05rem;line-height:1.9;color:var(--ink2);margin-bottom:22px;}
+.story-text p{margin-bottom:14px;}
+.story-text .drop-cap::first-letter{font-family:'Uncial Antiqua',cursive;font-size:3.8rem;float:left;line-height:0.75;margin:0.08em 0.1em 0 0;color:var(--crimson);text-shadow:1px 1px 0 rgba(139,26,26,0.2);}
+.story-emphasis{font-style:italic;color:var(--ink);}
+.story-dialogue{border-left:2px solid var(--gold2);padding-left:16px;margin:14px 0;font-style:italic;color:var(--ink3);}
+.choices-container{margin-top:28px;}
+.choices-heading{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:5px;text-transform:uppercase;color:var(--ink4);margin-bottom:14px;}
+.choice-btn{display:block;width:100%;text-align:left;background:transparent;border:1px solid var(--parch4);padding:14px 18px;margin-bottom:10px;cursor:pointer;font-family:'EB Garamond',serif;font-size:0.95rem;color:var(--ink2);line-height:1.5;transition:all 0.2s;position:relative;}
+.choice-btn::before{content:'◆';color:var(--gold2);margin-right:10px;font-size:0.6rem;vertical-align:middle;opacity:0;transition:opacity 0.2s;}
+.choice-btn:hover{background:rgba(212,160,23,0.06);border-color:var(--gold2);color:var(--ink);padding-left:24px;}
+.choice-btn:hover::before{opacity:1;}
+.choice-btn .choice-effect{display:block;font-size:0.75rem;color:var(--gold);font-family:'Cinzel',serif;letter-spacing:1px;margin-top:4px;font-style:normal;}
+.choice-btn .choice-req{display:block;font-size:0.72rem;color:var(--crimson);font-style:italic;margin-top:2px;}
+.choice-btn:disabled{opacity:0.4;cursor:not-allowed;color:var(--ink4);}
+.outcome-card{background:var(--parch);border:1px solid var(--gold2);padding:20px;margin-top:20px;position:relative;animation:fadeUp 0.4s ease;}
+.outcome-card::before{content:'';position:absolute;inset:4px;border:1px solid rgba(184,134,11,0.2);pointer-events:none;}
+.outcome-label{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.outcome-text{font-style:italic;color:var(--ink2);line-height:1.75;margin-bottom:12px;}
+.outcome-gains{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.gain-badge{font-family:'Cinzel',serif;font-size:0.68rem;padding:3px 10px;border:1px solid;letter-spacing:1px;}
+.gb-stat{border-color:var(--gold2);color:var(--gold);}
+.gb-mem{border-color:var(--azure2);color:var(--azure);}
+.gb-rel{border-color:var(--forest2);color:var(--forest);}
+.gb-trait{border-color:var(--crimson);color:var(--crimson);}
+.gb-lore{border-color:var(--ink3);color:var(--ink3);}
+.continue-btn{margin-top:16px;padding:11px 28px;background:var(--ink2);border:1px solid var(--gold2);color:var(--gold3);font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.continue-btn:hover{background:var(--gold2);color:var(--ink);}
+.sidebar{position:sticky;top:60px;display:flex;flex-direction:column;gap:14px;}
+.sb-panel{background:var(--parch);border:1px solid var(--parch4);box-shadow:2px 2px 8px var(--shadow);position:relative;overflow:hidden;}
+.sb-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);}
+.sb-title{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);padding:9px 14px;border-bottom:1px solid var(--parch4);background:rgba(184,134,11,0.05);}
+.char-name-sb{font-family:'Uncial Antiqua',cursive;font-size:1.1rem;color:var(--ink);text-align:center;padding:10px 14px 4px;}
+.char-meta{text-align:center;font-size:0.78rem;color:var(--ink4);font-style:italic;padding-bottom:10px;border-bottom:1px solid var(--parch4);}
+.char-age{font-family:'Cinzel',serif;font-size:0.7rem;color:var(--gold);letter-spacing:2px;}
+.stat-list{padding:10px 14px;}
+.stat-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}
+.stat-name{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);min-width:80px;}
+.stat-pips{display:flex;gap:3px;flex:1;justify-content:flex-start;padding:0 8px;}
+.pip{width:8px;height:8px;border:1px solid var(--parch4);background:transparent;transition:all 0.3s;}
+.pip.filled{background:var(--gold2);border-color:var(--gold);}
+.stat-num{font-family:'Cinzel',serif;font-size:0.78rem;color:var(--ink2);min-width:20px;text-align:right;}
+.memory-list{padding:8px 14px 10px;}
+.memory-item{font-size:0.8rem;color:var(--ink3);padding:6px 0;border-bottom:1px solid rgba(184,134,11,0.15);font-style:italic;line-height:1.4;}
+.memory-item:last-child{border-bottom:none;}
+.memory-item .mem-label{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;font-style:normal;color:var(--gold2);display:block;margin-bottom:2px;}
+.rel-list{padding:8px 14px 10px;}
+.rel-item{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(184,134,11,0.15);font-size:0.82rem;}
+.rel-item:last-child{border-bottom:none;}
+.rel-name{color:var(--ink2);font-weight:500;}
+.rel-role{color:var(--ink4);font-size:0.7rem;font-style:italic;}
+.rel-heart{font-size:0.65rem;font-family:'Cinzel',serif;letter-spacing:1px;padding:2px 6px;border:1px solid;}
+.rh-love{border-color:var(--crimson2);color:var(--crimson);}
+.rh-friend{border-color:var(--forest2);color:var(--forest);}
+.rh-rival{border-color:var(--gold2);color:var(--gold);}
+.rh-enemy{border-color:var(--ink3);color:var(--ink3);}
+.rh-mentor{border-color:var(--azure2);color:var(--azure);}
+.rh-neutral{border-color:var(--parch4);color:var(--ink4);}
+.trait-list{padding:8px 14px 10px;display:flex;flex-wrap:wrap;gap:5px;}
+.trait-badge{font-family:'Cinzel',serif;font-size:0.63rem;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border:1px solid;}
+.tb-gold{border-color:var(--gold2);color:var(--gold);}
+.tb-crimson{border-color:var(--crimson2);color:var(--crimson);}
+.tb-azure{border-color:var(--azure2);color:var(--azure);}
+.tb-forest{border-color:var(--forest2);color:var(--forest);}
+.tb-ink{border-color:var(--ink3);color:var(--ink3);}
+.disc-list{padding:8px 14px 10px;}
+.disc-item{font-size:0.78rem;color:var(--ink3);padding:5px 0;border-bottom:1px solid rgba(184,134,11,0.12);font-style:italic;line-height:1.4;}
+.disc-item:last-child{border-bottom:none;}
+.disc-item strong{font-style:normal;color:var(--azure);}
+.spell-list{padding:8px 14px 10px;}
+.spell-item{padding:6px 0;border-bottom:1px solid rgba(184,134,11,0.12);font-size:0.82rem;}
+.spell-item:last-child{border-bottom:none;}
+.spell-name{color:var(--azure2);font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:1px;}
+.spell-desc{color:var(--ink4);font-size:0.72rem;font-style:italic;}
+.progress-bar-wrap{padding:8px 14px 12px;}
+.pb-label{font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);margin-bottom:5px;display:flex;justify-content:space-between;}
+.pb-track{height:5px;background:var(--parch3);border:1px solid var(--parch4);overflow:hidden;}
+.pb-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width 0.6s ease;}
+.era-transition{position:fixed;inset:0;background:var(--ink);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;}
+.et-ornament{color:var(--gold2);font-size:1.5rem;letter-spacing:10px;margin-bottom:20px;}
+.et-era{font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:8px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.et-title{font-family:'Uncial Antiqua',cursive;font-size:clamp(2rem,6vw,3.5rem);color:var(--parch);margin-bottom:16px;line-height:1.2;}
+.et-subtitle{font-style:italic;color:var(--parch4);font-size:1rem;max-width:500px;line-height:1.8;margin-bottom:30px;}
+.et-continue{padding:12px 40px;background:transparent;border:1px solid var(--gold2);color:var(--gold3);font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:4px;text-transform:uppercase;cursor:pointer;transition:all 0.3s;animation:pulse 2s ease-in-out infinite;}
+.et-continue:hover{background:var(--gold2);color:var(--ink);animation:none;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,160,23,0);}50%{box-shadow:0 0 0 6px rgba(212,160,23,0.2);}}
+.duel-arena{background:var(--parch);border:1px solid var(--gold2);padding:20px;margin:20px 0;position:relative;}
+.duel-arena::before{content:'⚔ DUEL ⚔';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--parch);padding:0 12px;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:4px;color:var(--crimson);}
+.duel-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:16px;}
+.duel-combatant{text-align:center;padding:10px;border:1px solid var(--parch4);}
+.duel-name{font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:1px;color:var(--ink);margin-bottom:5px;}
+.duel-vs-text{font-family:'Uncial Antiqua',cursive;font-size:1.4rem;color:var(--crimson);text-align:center;}
+.health-track{display:flex;justify-content:center;gap:4px;margin-top:6px;}
+.health-pip{width:12px;height:12px;border:1px solid var(--parch4);background:var(--crimson2);transition:all 0.3s;}
+.health-pip.gone{background:transparent;border-color:var(--parch3);}
+.duel-spells{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.spell-btn{padding:10px 12px;background:transparent;border:1px solid var(--parch4);cursor:pointer;font-family:'EB Garamond',serif;font-size:0.88rem;color:var(--ink2);text-align:left;transition:all 0.2s;}
+.spell-btn:hover{border-color:var(--azure2);background:rgba(26,58,107,0.05);color:var(--azure);}
+.spell-btn .sp-name{font-family:'Cinzel',serif;font-size:0.75rem;color:var(--azure2);display:block;margin-bottom:2px;}
+.spell-btn .sp-cost{font-size:0.7rem;color:var(--ink4);display:block;}
+.spell-btn:disabled{opacity:0.3;cursor:not-allowed;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.scene-enter{animation:fadeUp 0.5s ease forwards;}
+.choice-btn:nth-child(1){animation:fadeUp 0.3s ease 0.1s both;}
+.choice-btn:nth-child(2){animation:fadeUp 0.3s ease 0.2s both;}
+.choice-btn:nth-child(3){animation:fadeUp 0.3s ease 0.3s both;}
+.choice-btn:nth-child(4){animation:fadeUp 0.3s ease 0.4s both;}
+.end-scroll{max-width:700px;margin:60px auto;padding:60px 50px;background:var(--parch);border:1px solid var(--parch4);box-shadow:0 8px 60px rgba(26,18,8,0.3);text-align:center;position:relative;}
+.end-scroll::before,.end-scroll::after{content:'';position:absolute;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);}
+.end-scroll::before{top:20px;}
+.end-scroll::after{bottom:20px;}
+.hidden{display:none!important;}
+@media(max-width:760px){.game-body{grid-template-columns:1fr;}.narrative-panel{padding-right:0;margin-bottom:24px;}.sidebar{position:static;}}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="title-screen">
+  <div class="title-ornament">✦ &nbsp;&nbsp; A High Fantasy Saga &nbsp;&nbsp; ✦</div>
+  <div class="game-title-main">The Chronicle of<br>Aelindra's Child</div>
+  <div class="game-title-sub">From First Breath to Final Destiny</div>
+  <div class="title-verse">
+    "Every great mage, every warrior-king, every saint who shaped the age —<br>
+    began the same way you begin now.<br>
+    Helpless. Unnamed. Wondering.<br><br>
+    This is their secret. This is your inheritance."
+  </div>
+  <div class="creation-parchment">
+    <div class="cr-heading">The Registrar's Office — Kingdom of Aelindra</div>
+    <div class="cr-title">Record of Birth</div>
+    <div class="cr-divider">❧</div>
+    <div class="cr-field">
+      <label class="cr-label">Child's Name</label>
+      <input class="cr-input" id="pname" type="text" placeholder="Enter name..." maxlength="22">
+    </div>
+    <div class="cr-field">
+      <label class="cr-label">Lineage — The Blood You Carry</label>
+      <div class="lineage-grid" id="lineage-grid">
+        <div class="lineage-card sel" data-lineage="noble"><div class="lc-name">🏰 The High Houses</div><div class="lc-desc">Born to nobility. Blood rights, enemies made before birth, a name that opens doors.</div><div class="lc-bonus">+2 Influence · +1 Wit · Rival from birth</div></div>
+        <div class="lineage-card" data-lineage="mage"><div class="lc-name">✦ The Arcane Bloodline</div><div class="lc-desc">Magic runs in your family — a gift and a burden. The Academy will know your name before you arrive.</div><div class="lc-bonus">+2 Magic · +1 Will · Early power, unstable</div></div>
+        <div class="lineage-card" data-lineage="soldier"><div class="lc-name">⚔ The Warrior Caste</div><div class="lc-desc">Your family bleeds for the kingdom. You were born knowing the cost of courage.</div><div class="lc-bonus">+2 Strength · +1 Grit · Loyal bonds</div></div>
+        <div class="lineage-card" data-lineage="scholar"><div class="lc-name">📜 The Scholar Clans</div><div class="lc-desc">Knowledge before swords. Your family kept the old texts alive through dark ages.</div><div class="lc-bonus">+2 Wit · +1 Magic · Secret lore</div></div>
+        <div class="lineage-card" data-lineage="wanderer"><div class="lc-name">🌿 The Wandering Folk</div><div class="lc-desc">Neither bound to land nor court. You come from people who see what settled eyes cannot.</div><div class="lc-bonus">+2 Perception · +1 Grit · Strange gift</div></div>
+        <div class="lineage-card" data-lineage="cursed"><div class="lc-name">💀 The Marked Line</div><div class="lc-desc">Something old chose your bloodline. People fear you without knowing why — and they are right to.</div><div class="lc-bonus">+3 Magic · Dark prophecy · The price unknown</div></div>
+      </div>
+    </div>
+    <div class="cr-field">
+      <label class="cr-label">The Season of Your Birth</label>
+      <div class="lineage-grid" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+        <div class="lineage-card" data-season="spring" style="padding:9px;text-align:center;"><div class="lc-name" style="font-size:0.8rem;">🌸 Spring</div><div class="lc-bonus">+1 Will</div></div>
+        <div class="lineage-card sel" data-season="summer" style="padding:9px;text-align:center;"><div class="lc-name" style="font-size:0.8rem;">☀ Summer</div><div class="lc-bonus">+1 Strength</div></div>
+        <div class="lineage-card" data-season="autumn" style="padding:9px;text-align:center;"><div class="lc-name" style="font-size:0.8rem;">🍂 Autumn</div><div class="lc-bonus">+1 Wit</div></div>
+        <div class="lineage-card" data-season="winter" style="padding:9px;text-align:center;"><div class="lc-name" style="font-size:0.8rem;">❄ Winter</div><div class="lc-bonus">+1 Magic</div></div>
+      </div>
+    </div>
+    <button class="cr-btn" onclick="beginChronicle()">◆ &nbsp; Begin the Chronicle &nbsp; ◆</button>
+  </div>
+</div>
+
+<div id="game-screen">
+  <div class="era-banner" id="era-banner">✦ <span id="era-label">The First Age</span> ✦ <span id="era-year">Year 0</span> <span id="era-loc">Aelindra</span></div>
+  <div class="game-body">
+    <div class="narrative-panel" id="narrative-panel">
+      <div id="scene-content" class="scene-enter"></div>
+    </div>
+    <div class="sidebar">
+      <div class="sb-panel">
+        <div class="sb-title">The Protagonist</div>
+        <div class="char-name-sb" id="sb-name">—</div>
+        <div class="char-meta"><div id="sb-lineage">—</div><div class="char-age" id="sb-age">Age 0</div></div>
+        <div class="stat-list" id="stat-list"></div>
+        <div class="progress-bar-wrap">
+          <div class="pb-label"><span id="arc-label">Infancy</span><span id="arc-pct">0%</span></div>
+          <div class="pb-track"><div class="pb-fill" id="arc-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="sb-panel" id="trait-panel"><div class="sb-title">Character Traits</div><div class="trait-list" id="trait-list"><span style="color:var(--ink4);font-size:0.78rem;font-style:italic;padding:6px 0;">None yet earned.</span></div></div>
+      <div class="sb-panel hidden" id="spell-panel"><div class="sb-title">Spells Known</div><div class="spell-list" id="spell-list"></div></div>
+      <div class="sb-panel" id="rel-panel"><div class="sb-title">People of Note</div><div class="rel-list" id="rel-list"><div style="color:var(--ink4);font-size:0.78rem;font-style:italic;padding:6px 0;">None yet known.</div></div></div>
+      <div class="sb-panel"><div class="sb-title">Memories ✦ Formative</div><div class="memory-list" id="memory-list"><div style="color:var(--ink4);font-size:0.78rem;font-style:italic;padding:6px 0;">The page is blank.</div></div></div>
+      <div class="sb-panel" id="disc-panel"><div class="sb-title">Secrets & Lore</div><div class="disc-list" id="disc-list"><div style="color:var(--ink4);font-size:0.78rem;font-style:italic;padding:6px 0;">Nothing yet uncovered.</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="era-overlay" class="era-transition hidden">
+  <div class="et-ornament">✦ ✦ ✦</div>
+  <div class="et-era" id="et-era-label">—</div>
+  <div class="et-title" id="et-title">—</div>
+  <div class="et-subtitle" id="et-subtitle">—</div>
+  <button class="et-continue" id="et-continue">Continue the Chronicle</button>
+</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// GAME STATE
+// ═══════════════════════════════════════════════════════════════
+var C = {};
+var currentArc = 'infancy';
+var arcIndex = 0;
+var duelState = {};
+
+function initCharacter(name, lineage, season) {
+  var bases = {Strength:2,Magic:2,Wit:2,Influence:2,Grit:2,Will:2,Perception:2};
+  var lb = {noble:{Influence:2,Wit:1},mage:{Magic:2,Will:1},soldier:{Strength:2,Grit:1},scholar:{Wit:2,Magic:1},wanderer:{Perception:2,Grit:1},cursed:{Magic:3}};
+  var sb = {spring:{Will:1},summer:{Strength:1},autumn:{Wit:1},winter:{Magic:1}};
+  var stats = Object.assign({},bases);
+  var lbonus = lb[lineage]||{};
+  Object.keys(lbonus).forEach(function(k){stats[k]=(stats[k]||0)+lbonus[k];});
+  var sbonus = sb[season]||{};
+  Object.keys(sbonus).forEach(function(k){stats[k]=(stats[k]||0)+sbonus[k];});
+
+  C = {name:name,lineage:lineage,season:season,age:0,era:'infancy',stats:stats,
+    traits:[],memories:[],relationships:{},spells:[],discoveries:[],choices:{},
+    sceneIdx:0,arcProgress:0,firstSpell:null,academyHouse:null,rivalName:null,
+    romanticInterest:null,mentorName:null,secretKnown:false,vow:null};
+
+  if (lineage==='noble') {
+    C.relationships['Mother']={role:'Parent — Countess',heart:'mentor',note:'Warm but ambitious for you.'};
+    C.relationships['Father']={role:'Parent — Count',heart:'mentor',note:'Distant but proud.'};
+    addRelationship('Sera Vane','Childhood rival — noble heir','rival','She was there at your cradle, already competing.');
+  } else if (lineage==='mage') {
+    C.relationships['Mother']={role:'Parent — Arcanist',heart:'mentor',note:'She sees the power in you.'};
+    C.relationships['Father']={role:'Parent',heart:'friend',note:'Adores you. Slightly afraid of you.'};
+  } else if (lineage==='soldier') {
+    C.relationships['Mother']={role:'Parent — Captain of Guard',heart:'mentor',note:'Fierce love, impossible standards.'};
+    C.relationships['Father']={role:'Parent — Veteran',heart:'friend',note:'His scars tell better stories than his words.'};
+  } else if (lineage==='scholar') {
+    C.relationships['Mother']={role:'Parent — Archivist',heart:'mentor',note:'You learned letters before you learned to walk.'};
+    C.relationships['Father']={role:'Parent — Translator',heart:'friend',note:'Kindly, brilliant, perpetually lost in thought.'};
+  } else if (lineage==='wanderer') {
+    C.relationships['Grandmother']={role:'Elder of the Road',heart:'mentor',note:'She named you under the stars.'};
+  } else if (lineage==='cursed') {
+    C.relationships['Mother']={role:'Parent — Bearer of the Mark',heart:'mentor',note:'She knows what you carry. She grieves and rejoices in equal measure.'};
+  }
+
+  if (lineage==='cursed') addTrait('The Marked','crimson');
+  if (lineage==='mage') addTrait('Arcane Blood','azure');
+  if (lineage==='noble') addTrait('Blue Blood','gold');
+  if (lineage==='soldier') addTrait('Iron-Born','ink');
+  if (lineage==='scholar') addTrait('Bookworm','forest');
+  if (lineage==='wanderer') addTrait('Road-Touched','forest');
+}
+
+function addTrait(name, color) { if (!C.traits.find(function(t){return t.name===name;})) C.traits.push({name:name,color:color}); }
+function addMemory(label, text) { C.memories.unshift({label:label,text:text}); if (C.memories.length>8) C.memories.pop(); }
+function addRelationship(name, role, heart, note) { C.relationships[name]={role:role,heart:heart,note:note}; }
+function addSpell(name, desc) { if (!C.spells.find(function(s){return s.name===name;})) C.spells.push({name:name,desc:desc}); }
+function addDiscovery(title, text) { C.discoveries.unshift({title:title,text:text}); }
+function modStat(stat, amount) { C.stats[stat]=Math.max(0,(C.stats[stat]||0)+amount); }
+function hasTrait(name) { return C.traits.some(function(t){return t.name===name;}); }
+function getStat(s) { return C.stats[s]||0; }
+
+// ═══════════════════════════════════════════════════════════════
+// UI RENDERING
+// ═══════════════════════════════════════════════════════════════
+function updateSidebar() {
+  document.getElementById('sb-name').textContent = C.name;
+  var lnames = {noble:'House Noble',mage:'Arcane Blood',soldier:'Warrior Caste',scholar:'Scholar Clan',wanderer:'Wandering Folk',cursed:'The Marked Line'};
+  document.getElementById('sb-lineage').textContent = (lnames[C.lineage]||C.lineage)+' · Born in '+C.season.charAt(0).toUpperCase()+C.season.slice(1);
+  document.getElementById('sb-age').textContent = 'Age '+C.age;
+
+  var statEl = document.getElementById('stat-list');
+  statEl.innerHTML = '';
+  ['Strength','Magic','Wit','Influence','Grit','Will','Perception'].forEach(function(s) {
+    var val = getStat(s), max = 12;
+    var row = document.createElement('div'); row.className='stat-row';
+    var pips = Array.from({length:max},function(_,i){return '<div class="pip'+(i<val?' filled':'')+'"></div>';}).join('');
+    row.innerHTML = '<span class="stat-name">'+s+'</span><div class="stat-pips">'+pips+'</div><span class="stat-num">'+val+'</span>';
+    statEl.appendChild(row);
+  });
+
+  var traitEl = document.getElementById('trait-list');
+  if (C.traits.length) traitEl.innerHTML = C.traits.map(function(t){return '<span class="trait-badge tb-'+t.color+'">'+t.name+'</span>';}).join('');
+
+  var spellPanel = document.getElementById('spell-panel');
+  if (C.spells.length>0) {
+    spellPanel.classList.remove('hidden');
+    document.getElementById('spell-list').innerHTML = C.spells.map(function(s){return '<div class="spell-item"><div class="spell-name">'+s.name+'</div><div class="spell-desc">'+s.desc+'</div></div>';}).join('');
+  }
+
+  var relEl = document.getElementById('rel-list');
+  var rels = Object.entries(C.relationships);
+  if (rels.length) {
+    relEl.innerHTML = rels.map(function(e){var n=e[0],r=e[1]; return '<div class="rel-item"><div><span class="rel-name">'+n+'</span><div class="rel-role">'+r.role+'</div><div style="font-size:0.7rem;color:var(--ink4);font-style:italic;margin-top:1px">'+(r.note||'')+'</div></div><span class="rel-heart rh-'+r.heart+'">'+r.heart+'</span></div>';}).join('');
+  } else {
+    relEl.innerHTML = '<div style="color:var(--ink4);font-size:0.78rem;font-style:italic;padding:6px 0;">None yet known.</div>';
+  }
+
+  var memEl = document.getElementById('memory-list');
+  if (C.memories.length) memEl.innerHTML = C.memories.map(function(m){return '<div class="memory-item"><span class="mem-label">'+m.label+'</span>'+m.text+'</div>';}).join('');
+
+  var discEl = document.getElementById('disc-list');
+  if (C.discoveries.length) discEl.innerHTML = C.discoveries.map(function(d){return '<div class="disc-item"><strong>'+d.title+':</strong> '+d.text+'</div>';}).join('');
+}
+
+function updateBanner() {
+  var eraNames = {infancy:'Act I — Infancy',childhood:'Act II — Childhood',academy:'Act III — The Academy',destiny:'Act IV — The Reckoning'};
+  document.getElementById('era-label').textContent = eraNames[C.era]||C.era;
+  document.getElementById('era-year').textContent = 'Age '+C.age;
+}
+
+function setArcProgress(pct, label) {
+  document.getElementById('arc-fill').style.width = pct+'%';
+  document.getElementById('arc-pct').textContent = Math.round(pct)+'%';
+  document.getElementById('arc-label').textContent = label||C.era;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCENE RENDERING
+// ═══════════════════════════════════════════════════════════════
+function renderScene(scene) {
+  var container = document.getElementById('scene-content');
+  container.innerHTML = '';
+  container.className = 'scene-enter';
+
+  var html = '<div class="scene-header">';
+  if (scene.location) html += '<div class="scene-location">'+scene.location+'</div>';
+  html += '<div class="scene-title">'+scene.title+'</div><div class="scene-title-line"></div></div>';
+  html += '<div class="story-text">';
+  (scene.paragraphs||[]).forEach(function(p,i) {
+    if (typeof p==='string') {
+      html += '<p'+(i===0?' class="drop-cap"':'')+'>'+p+'</p>';
+    } else if (p.type==='dialogue') {
+      html += '<div class="story-dialogue">"'+p.text+'" <span style="font-size:0.85rem;color:var(--ink4)">— '+p.speaker+'</span></div>';
+    } else if (p.type==='emphasis') {
+      html += '<p><span class="story-emphasis">'+p.text+'</span></p>';
+    }
+  });
+  html += '</div>';
+
+  if (scene.choices && scene.choices.length>0) {
+    html += '<div class="choices-container"><div class="choices-heading">◆ &nbsp; What do you do? &nbsp; ◆</div>';
+    scene.choices.forEach(function(ch,i) {
+      var disabled = ch.requires && !meetsRequirement(ch.requires);
+      html += '<button class="choice-btn" onclick="makeChoice('+i+')" '+(disabled?'disabled':'')+'>'+ch.text+(ch.effect?'<span class="choice-effect">'+ch.effect+'</span>':'')+(disabled&&ch.requires?'<span class="choice-req">Requires: '+ch.requires.desc+'</span>':'')+'</button>';
+    });
+    html += '</div>';
+  } else if (scene.continueLabel) {
+    html += '<button class="continue-btn" onclick="advanceStory()">'+scene.continueLabel+'</button>';
+  }
+
+  container.innerHTML = html;
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateSidebar();
+  updateBanner();
+}
+
+function meetsRequirement(req) {
+  if (req.stat) return getStat(req.stat)>=req.value;
+  if (req.trait) return hasTrait(req.trait);
+  if (req.choice) return C.choices[req.choice]!==undefined;
+  if (req.spell) return C.spells.some(function(s){return s.name===req.spell;});
+  return true;
+}
+
+function showOutcome(outcome, onContinue) {
+  var container = document.getElementById('scene-content');
+  var div = document.createElement('div'); div.className='outcome-card';
+  var gains = '';
+  (outcome.gains||[]).forEach(function(g){gains+='<span class="gain-badge gb-'+g.type+'">'+g.label+'</span>';});
+  div.innerHTML = '<div class="outcome-label">◆ &nbsp; Outcome &nbsp; ◆</div><div class="outcome-text">'+outcome.text+'</div>'+(gains?'<div class="outcome-gains">'+gains+'</div>':'')+'<button class="continue-btn" onclick="continueAfterOutcome()">'+(outcome.btnLabel||'Continue')+'</button>';
+  container.appendChild(div);
+  div.scrollIntoView({behavior:'smooth',block:'nearest'});
+  window._outcomeCallback = onContinue;
+  (outcome.statChanges||[]).forEach(function(sc){modStat(sc.stat,sc.amount);});
+  (outcome.newTraits||[]).forEach(function(t){addTrait(t.name,t.color);});
+  (outcome.newMemories||[]).forEach(function(m){addMemory(m.label,m.text);});
+  (outcome.newRelationships||[]).forEach(function(r){addRelationship(r.name,r.role,r.heart,r.note);});
+  (outcome.newSpells||[]).forEach(function(s){addSpell(s.name,s.desc);});
+  (outcome.newDiscoveries||[]).forEach(function(d){addDiscovery(d.title,d.text);});
+  if (outcome.setChoice) C.choices[outcome.setChoice.key]=outcome.setChoice.value;
+  if (outcome.setVar) C[outcome.setVar.key]=outcome.setVar.value;
+  updateSidebar();
+}
+
+function continueAfterOutcome() {
+  if (window._outcomeCallback) { window._outcomeCallback(); window._outcomeCallback=null; }
+}
+
+function showEraTransition(era, title, subtitle, onDone) {
+  var overlay = document.getElementById('era-overlay');
+  document.getElementById('et-era-label').textContent = era;
+  document.getElementById('et-title').textContent = title;
+  document.getElementById('et-subtitle').textContent = subtitle;
+  overlay.classList.remove('hidden');
+  document.getElementById('et-continue').onclick = function() { overlay.classList.add('hidden'); onDone(); };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// THE STORY — ACT I: INFANCY
+// ═══════════════════════════════════════════════════════════════
+// NOTE: Arrow functions inside template literals removed — paragraphs are static strings.
+// Dynamic text based on season/lineage is resolved at render time via buildScene() helpers.
+
+function buildBirthScene() {
+  var seasonText = (C.season==='winter') ? 'midwinter, when the stars hang closest to the earth' : (C.season==='summer') ? 'the summer solstice, when light fills every corner' : (C.season==='spring') ? 'the first week of spring, when the world remembers warmth' : 'the deep heart of autumn, when the world turns gold';
+  return {
+    id:'birth',
+    location:'The Kingdom of Aelindra · A Chamber of Welcome',
+    title:'The First Breath',
+    paragraphs:[
+      'The world arrives all at once: light, noise, cold air, and the unfamiliar feeling of lungs. You are born at '+seasonText+' in the kingdom\'s thirty-third year of peace.',
+      'The midwife wraps you in linen. A fire crackles. Outside, the kingdom of Aelindra stretches from its golden capital to the dark borders where old magic still moves in the forest.',
+      'You do not yet know any of this. You know warmth. You know hunger. You know the sound of a voice above you, soft and trembling with something you will later understand is love.',
+      {type:'dialogue',text:'You have your grandmother\'s eyes. And something else.',speaker:'A voice, above you'},
+      'What that something else is, no one in the room can name. But the candle flame bends toward you as you exhale. Just once. Just slightly.',
+    ],
+    choices:[
+      {text:'The flame. You reach for it — your tiny fist, opening.',effect:'+1 Magic · Memory: The First Reaching',action:'infancy_reach_flame'},
+      {text:'The voice. You fix your unfocused gaze toward it — toward her.',effect:'+1 Influence · Memory: First Recognition',action:'infancy_reach_voice'},
+      {text:'Silence. You watch. You do not reach for anything.',effect:'+1 Perception · Memory: The Watching Infant',action:'infancy_watch'},
+    ],
+  };
+}
+
+var STORY_INFANCY_STATIC = [
+  null, // placeholder — birth scene built dynamically
+  {
+    id:'first_year',location:'The Nursery · Year One',title:"Learning the World's Shape",
+    paragraphs:[
+      'The first year passes in a blur of sensation. You are attended to, sung to, carried. The world is very large and very confusing.',
+      'But you are not an ordinary infant. By six months, the servants whisper about you. You watch things too carefully. You laugh at moments no one else finds funny. And twice — only twice — objects have moved without being touched.',
+      {type:'dialogue',text:'It happens in magical bloodlines sometimes. Early manifestation. Nothing to worry about.',speaker:'Your parent, to the nervous staff'},
+      'At ten months, you pull yourself upright against the wooden bars of your crib, look at the window, and say your first word — not mama, not papa, but the single syllable that will define the first chapter of your chronicle.',
+    ],
+    choices:[
+      {text:'"Light." You say it looking at the window — the morning sun on the sill.',effect:'+1 Magic, +1 Will · Trait: Light-Born',action:'firstword_light'},
+      {text:'"More." You say it looking at your cup — empty.',effect:'+1 Grit, +1 Influence · Trait: Never Satisfied',action:'firstword_more'},
+      {text:'"Why." Not a question. A statement. You say it looking at nothing in particular.',effect:'+1 Wit, +1 Perception · Trait: The Question',action:'firstword_why'},
+      {text:'"Mine." You say it clutching a blanket.',effect:'+1 Strength, +1 Grit · Trait: Iron Grip',action:'firstword_mine'},
+    ],
+  },
+  {
+    id:'omen',location:"The Great Hall · Your Name-Day Feast · Age 3",title:"The Name-Day and the Omen",
+    paragraphs:[
+      'Your third Name-Day is a proper feast — the first time you are allowed at the great table. You sit on cushions, sticky-fingered, watching the adults talk above you.',
+      'A wandering seer arrives uninvited. She is old enough to be three people, her robes patched with symbols from seven different traditions. She pushes through the crowd to you specifically, kneels to your eye level, and stares.',
+      'The hall goes quiet.',
+      {type:'dialogue',text:"This one. Yes, this one has the thread. I can see it from here — wound through the hands, the heart, the very eyes. The world will ask something terrible of you, child. And you will answer.",speaker:'The Wandering Seer'},
+      "She presses a small object into your hand — a disc of dark stone carved with a symbol you've never seen before — and is gone before anyone can stop her.",
+      {type:'emphasis',text:"The adults make nervous laughter. The seer is senile, they say. Pay no mind. But the stone in your hand is warm. And the symbol on it — you have seen it before, somewhere. In a dream you can no longer remember clearly."},
+    ],
+    choices:[
+      {text:'You clutch the stone tightly and refuse to give it up when asked.',effect:"+1 Will · Discovery: The Dark Stone · Memory: The Seer's Warning",action:'omen_keep'},
+      {text:'You give it to your parent immediately and pretend nothing happened.',effect:'+1 Influence · Trait: Caution',action:'omen_give'},
+      {text:'You study the symbol on the stone very carefully before anyone takes it.',effect:"+1 Wit · Discovery: The Seer's Symbol",action:'omen_study'},
+    ],
+  },
+  {
+    id:'infancy_end',location:'The Nursery · Age 5',title:'The Last Day of Smallness',
+    paragraphs:[
+      'At five years old, you begin to understand the shape of your world. You have a home, a family, a place in things. You can run now — really run — and the world is full of corners you haven\'t explored yet.',
+      'Your parent sits with you one evening and tells you something important: the Academy of Aelindra exists, in the capital, and children of talent go there at sixteen. Ten years from now, that means you. The thought is so enormous it makes your stomach feel strange.',
+      {type:'dialogue',text:'You have time. Ten years to grow. To learn. To become someone worth sending.',speaker:'Your parent'},
+      {type:'emphasis',text:"You sit with that for a moment — the idea of becoming. The nursery walls have always been the edge of the world. But now you can see beyond them."},
+      'Childhood begins.',
+    ],
+    continueLabel:'Enter Childhood →',
+    onContinue:'begin_childhood',
+  },
+];
+
+function getInfancyScene(idx) {
+  if (idx===0) return buildBirthScene();
+  return STORY_INFANCY_STATIC[idx];
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACT II: CHILDHOOD
+// ═══════════════════════════════════════════════════════════════
+var STORY_CHILDHOOD = [
+  {
+    id:'tutor',location:'The Study · Age 6',title:'Master Bellum and the First Lesson',
+    paragraphs:[
+      'Your first tutor is an ancient man named Master Bellum who smells of pipe smoke and old paper and carries a pointer he never actually uses, except to gesture at things he finds interesting, which is everything.',
+      'He sits across from you on your first lesson day and pushes three objects onto the table: a compass, a candle, and a sword small enough to be a letter opener. He says nothing. He just waits.',
+      {type:'dialogue',text:"Choose one. Not to keep — just to examine. Tell me what it tells you about who you are.",speaker:'Master Bellum'},
+    ],
+    choices:[
+      {text:"The compass. \"It always finds north,\" you say. \"Even when you don't want it to.\"",effect:'+1 Wit, +1 Will · Memory: Bellum\'s Lesson — The Compass',action:'lesson_compass'},
+      {text:"The candle. You hold your hand near the flame. \"It's afraid of being snuffed.\"",effect:'+1 Magic, +1 Perception · Memory: Bellum\'s Lesson — The Candle',action:'lesson_candle'},
+      {text:"The sword. \"It's for decisions,\" you say. \"The kind words can't make.\"",effect:'+1 Strength, +1 Grit · Memory: Bellum\'s Lesson — The Sword',action:'lesson_sword'},
+    ],
+  },
+  {
+    id:'first_friend',location:'The Market District · Age 7',title:'The One Who Runs Beside You',
+    paragraphs:[
+      "On a morning when your parent has a meeting and no one is watching too carefully, you slip out of the estate and into the market. It's magnificent — noise and color and the smell of bread and something burning in a metal pot.",
+      'You are following the smell when you collide, at full speed, with another child coming around a corner equally fast. You both go down hard.',
+      "They look up at you. Bright eyes, ink-stained fingers, a gap where a front tooth used to be. There is a beat of silence. Then they grin.",
+      {type:'dialogue',text:"You were running too, then. Good. I thought I was the only one.",speaker:'The child'},
+      "You spend the entire afternoon together. Their name is Lira — they live above a bookbinder's shop and can read four languages and steal pastries with preternatural skill.",
+    ],
+    choices:[
+      {text:"You follow Lira's lead — let her take you to her favorite places.",effect:'+1 Influence, +1 Wit · New Relationship: Lira (friend)',action:'friend_follow'},
+      {text:'You challenge her to a race across the market. Winner buys pastries.',effect:'+1 Grit · New Relationship: Lira (friend/rival)',action:'friend_race'},
+      {text:"You ask her the most important question: what is the best thing she's ever read?",effect:'+1 Wit · New Relationship: Lira (close friend) · Discovery: A Book Title',action:'friend_read'},
+    ],
+  },
+  {
+    id:'first_magic',location:'The Back Garden · Age 8',title:'Something Slips Through Your Hands',
+    paragraphs:[
+      "You've been trying to make it happen on purpose for years. The candle-bending, the object-moving. Occasional glimpses of something that isn't quite sight and isn't quite hearing but lives somewhere between the two.",
+      'It happens, finally, in the garden at dusk. You are frustrated — your tutor set a problem you can\'t solve and the frustration has been building all day. You pick up a stone from the path and squeeze it.',
+      'And then the stone is not in your hand. It is three feet above your head, hovering. The air around it shimmers like summer heat.',
+      {type:'emphasis',text:'You stare at it for a very long time. It stares back. Neither of you is certain how this happened or how it ends.'},
+      'It falls, eventually. Drops straight down and cracks on the path. You look around. No one saw.',
+    ],
+    choices:[
+      {text:'You pick it up and do it again. Immediately. You need to understand the mechanism.',effect:'+2 Magic · Trait: Hungry for Power · First Spell: Levitation (crude)',action:'magic_again'},
+      {text:"You tell your parent that evening. You've been sitting on this secret long enough.",effect:'+1 Influence, +1 Will · Relationship changes · Academy letter sent early',action:'magic_tell'},
+      {text:"You press the two halves of the stone together and make a promise to yourself not to use it again until you know what you're doing.",effect:"+2 Will · Trait: The Restrained · Memory: The Promise",action:'magic_restrain'},
+      {text:'You laugh. Genuinely, freely. It is the funniest and strangest thing that has ever happened to you.',effect:'+1 Magic, +1 Grit · Trait: Laughing at Thunder',action:'magic_laugh'},
+    ],
+  },
+  {
+    id:'rival',location:'A Formal Gathering · Age 10',title:'The One Who Makes You Better (By Infuriating You)',
+    paragraphs:[
+      'Your rival is already accomplished by the age of ten. You see them at a gathering — poised, well-dressed, and demonstrably talented.',
+      {type:'dialogue',text:"I've heard of you. Everyone says your magic is wild. Untrained. That you can't control it.",speaker:'Your rival, with a pleasant smile'},
+      "They are not wrong. That is the worst part. They are technically not even being unkind. They are simply stating facts in a way that makes you want to prove every single one of them wrong.",
+      'They extend a hand.',
+      {type:'dialogue',text:"Kastor Vael. Heir to the Eastern Houses. I'll see you at the Academy, I expect.",speaker:'Kastor Vael'},
+      "The handshake lasts one second longer than it needs to on your end. A decision is made.",
+    ],
+    choices:[
+      {text:"You match his calm. \"Looking forward to it.\" You smile. Nothing reaches your eyes.",effect:'+1 Influence, +1 Will · Rival: Kastor Vael (cold)',action:'rival_cold'},
+      {text:'You say honestly: "You\'re right. For now." Leave him wondering what you meant.',effect:'+1 Grit · Rival: Kastor Vael (intrigued)',action:'rival_honest'},
+      {text:'You ask him to show you something — anything. Turn rivalry into temporary study.',effect:'+1 Wit, +1 Magic · Rival: Kastor Vael (complicated)',action:'rival_learn'},
+    ],
+  },
+  {
+    id:'study_year',location:'The Library / Training Ground · Ages 11–13',title:'The Years You Build Yourself',
+    paragraphs:[
+      'These are the years of work. Your tutor is increasingly impressed and increasingly demanding. You have approximately three years before the Academy entrance tests.',
+      'You cannot do everything. Nobody can. You can feel three different paths pulling at you, each one becoming more defined with every passing month.',
+      {type:'emphasis',text:'You choose what to pour yourself into — knowing what you practice now will define what arrives at the Academy gates.'},
+    ],
+    choices:[
+      {text:'Magic theory and spell practice, every morning. Your blood practically hums with it.',effect:'+2 Magic, +1 Will · Trait: The Devoted Mage · Spell Learned',action:'study_magic'},
+      {text:'Books, languages, history — the old archives are full of things people forgot to be afraid of.',effect:'+2 Wit, +1 Perception · Trait: Deep Reader · Discovery: Old Lore',action:'study_lore'},
+      {text:'Physical training, blade work, endurance — the kind of strength that does not require magic.',effect:'+2 Strength, +1 Grit · Trait: Steel and Sweat',action:'study_combat'},
+      {text:'Social navigation — how to enter rooms, how to read people, how to be believed.',effect:'+2 Influence, +1 Wit · Trait: The Diplomat',action:'study_social'},
+    ],
+  },
+  {
+    id:'eve_of_academy',location:'Home · The Night Before Departure · Age 15',title:'The Last Night Before Everything Changes',
+    paragraphs:[
+      "You are fifteen. Tomorrow at dawn a carriage comes to take you to the capital for the Academy entrance examination. If you pass — and you will pass — you will leave home for three years.",
+      "You have packed everything three times. You know the names of the entrance tests. You have read every pamphlet about the Academy that exists.",
+      "But tonight you just sit with your parent in the kitchen. Someone made tea. No one is speaking particularly quickly or importantly.",
+      {type:'dialogue',text:"We didn't tell you everything we know about your gift. Not because we wanted to deceive you. Because some things — some truths — are better found than given. But I will tell you this: you are not ordinary. You never have been. Be careful what you reach for.",speaker:'Your parent'},
+      {type:'emphasis',text:"You sit with that for a long time. Outside, the stars are the same stars they've always been. But somehow tonight they feel like they're paying attention."},
+    ],
+    choices:[
+      {text:'"I know." You do. You\'ve always known. You just didn\'t have words for it.',effect:"+1 Will · Memory: The Last Night",action:'eve_know'},
+      {text:"\"What didn't you tell me?\" You push gently. This is the time if there is one.",effect:"+1 Wit, +1 Perception · Discovery: A Family Secret",action:'eve_push'},
+      {text:'You hold their hand across the table. Nothing needs to be said.',effect:"+1 Grit · Relationship: Parent (deepened) · Memory: Silence That Says Everything",action:'eve_hold'},
+    ],
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// ACT III: ACADEMY
+// ═══════════════════════════════════════════════════════════════
+var STORY_ACADEMY = [
+  {
+    id:'arrival',location:'The Aelindra Academy · Main Gate · Age 16',title:'The Gate That Changes Everything',
+    paragraphs:[
+      "The Academy is larger than the pamphlets suggested and older than anything you've ever touched. The stone of the outer walls is dark grey shot through with veins of something that glows faintly silver at dusk — not paint, not mosaic, but the stone itself, embedded with centuries of magical residue.",
+      "You arrive with a trunk, a letter of introduction, and the particular hollow feeling of standing somewhere you've been dreaming about for ten years.",
+      'The gate is twice the height of a grown man and carved with the Academy motto on its lintel — words in the Old Tongue that translate as: "What you bring in is not what you carry out."',
+      "Around you, two hundred other students are arriving. You notice several things at once: Kastor Vael is already inside, speaking to two students who look like they've been waiting for him specifically. And standing alone by the northern fountain is someone with ink-stained fingers reading a book in a language you don't recognize.",
+    ],
+    choices:[
+      {text:'You go to the person at the fountain. Something about them feels important.',effect:'+1 Perception · New Relationship: The Fountain Scholar',action:'arrive_fountain'},
+      {text:'You go to Kastor. Better to establish the terms of your rivalry immediately.',effect:'+1 Influence · Rival: Kastor (acknowledged)',action:'arrive_kastor'},
+      {text:'You stand at the gate for a moment and read the motto again. You want to remember this exact feeling.',effect:'+1 Will · Memory: The Gate — First Arrival',action:'arrive_gate'},
+      {text:'You go inside immediately. You want to find the library before anyone else.',effect:'+1 Wit · Discovery: The Hidden Archive',action:'arrive_library'},
+    ],
+  },
+  {
+    id:'sorting',location:'The Grand Hall · The House Ceremony',title:'Where You Are Placed — And Why',
+    paragraphs:[
+      'The Academy has four Houses, and you will be placed in one this evening by the Shard — a fragment of the great Aetheric Crystal that has been testing students for three hundred years. You hold it and it reads you.',
+      'The room is very quiet.',
+      'The Shard pulses with light. Then it speaks — not aloud but directly into your mind:',
+      {type:'emphasis',text:'"There is more than one home for you here. But I read the loudest thing, the deepest thing, the thing you have not yet named — and that is where I must send you."'},
+      'The light holds you. The color it turns will tell everyone in this room something about you.',
+    ],
+    choices:[
+      {text:'Gold — House Solara. Magic of light, healing, revelation. The scholars and saints.',effect:'Join House Solara · +1 Magic, +1 Will · Trait: Solaran',action:'house_solara'},
+      {text:'Crimson — House Ignar. Magic of force, war, passion. The champions and generals.',effect:'Join House Ignar · +1 Strength, +1 Grit · Trait: Ignaran',action:'house_ignar'},
+      {text:'Midnight Blue — House Abyss. Magic of void, memory, secrets. The archivists and seers.',effect:'Join House Abyss · +1 Wit, +1 Perception · Trait: Abyssal',action:'house_abyss'},
+      {text:'Silver-Green — House Verdant. Magic of life, change, nature. The healers and shapers.',effect:'Join House Verdant · +1 Perception, +1 Grit · Trait: Verdant',action:'house_verdant'},
+    ],
+  },
+  {
+    id:'roommate',location:'Academy Dormitory · First Week',title:'Who You Wake Up Next To',
+    paragraphs:[
+      'Your dormitory room is small, well-organized, and has a second bed that is inhabited. Their name is Orin — round-faced, perpetually sleep-deprived, from a farming family in the eastern provinces, here on pure test scores and nothing else.',
+      'They are sitting on their bed when you arrive, surrounded by books, looking slightly overwhelmed.',
+      {type:'dialogue',text:"You're the other one. Good. I was worried they'd put me with someone who talks in their sleep. Do you talk in your sleep?",speaker:'Orin'},
+      {type:'dialogue',text:"I don't know. I'm usually asleep.",speaker:'You'},
+      "They think about this for a moment. Then they laugh — a short, surprised sound, as if laughter had ambushed them. \"Fair,\" they say. \"I'm Orin.\"",
+      {type:'emphasis',text:"Something about the plainness of it — no posturing, no performance — is the most relaxing conversation you've had since arriving."},
+    ],
+    choices:[
+      {text:'You help them organize their books. You have opinions about organization.',effect:'+1 Wit · New Relationship: Orin (warm)',action:'room_help'},
+      {text:"You ask what they're most afraid of failing at. You want to know who you're living with.",effect:'+1 Perception · New Relationship: Orin (honest)',action:'room_ask'},
+      {text:'You just make tea — you packed some from home — and offer them a cup.',effect:'+1 Grit · New Relationship: Orin (comfortable)',action:'room_tea'},
+    ],
+  },
+  {
+    id:'mentor',location:'Advanced Theory Seminar · Third Week',title:'The Professor Who Sees You',
+    paragraphs:[
+      "Archmage Tessaveth does not teach introductory courses. She teaches exactly two seminars per year, open only to students who show specific kinds of promise, and you are in one of them — you don't entirely know why, except that she left a note on your dormitory door.",
+      'She is not what you expected from her reputation. She is small, quick, and has the kind of eyes that make you feel your thoughts are slightly more legible than you\'d prefer.',
+      'In your third session, she does something unprecedented — she asks you to stay after class.',
+      {type:'dialogue',text:"You are not the most talented student I have this year. Kastor Vael has a more disciplined technical approach, and three of the Solaran students have raw power you haven't matched yet. But you have something none of them have.",speaker:'Archmage Tessaveth'},
+      {type:'dialogue',text:"You lean toward the thing you shouldn't touch. And you're not afraid enough. In my experience that is either catastrophic or it's exactly what's needed. I am choosing to find out which.",speaker:'Archmage Tessaveth'},
+    ],
+    choices:[
+      {text:"\"What is it I have that they don't?\" You need to hear her say it.",effect:'+1 Wit · Discovery: Your True Nature · Mentor bond begins',action:'mentor_ask'},
+      {text:"\"Why are you telling me this?\" You suspect there's an agenda. There's always an agenda.",effect:'+1 Perception · New Relationship: Tessaveth (complex)',action:'mentor_suspect'},
+      {text:"\"I'll try not to disappoint you.\" You mean it more than any three words you've said.",effect:'+1 Will · New Relationship: Tessaveth (mentor)',action:'mentor_vow'},
+    ],
+  },
+  {
+    id:'first_duel',location:'The Practice Courts · Month Two',title:'Proof Against Someone Who\'s Watching',
+    paragraphs:[
+      'The Academy holds practice duels every two weeks — not for sport exactly, but for assessment. Faculty observe. Scores are kept. Reputations are made.',
+      'In your second duel you draw Kastor Vael.',
+      'The crowd that gathers is immediate. Everyone knew this was coming. The duel master reads the rules flatly. Three points wins. No blood magic, no structural damage, no targeting of the face or hands.',
+      'Kastor bows with precise elegance. His first spell is already forming — you can see the threads of it in the air, disciplined, classical, textbook.',
+      {type:'emphasis',text:'You have perhaps five seconds to decide who you are in this moment.'},
+    ],
+    continueLabel:'Enter the Duel →',
+    onContinue:'begin_duel_kastor',
+  },
+  {
+    id:'the_secret',location:'The Deep Archive · Academy Year Two',title:'What the Archive Knows',
+    paragraphs:[
+      'It begins with a book that wasn\'t there yesterday.',
+      'You find it in the Deep Archive — the part of the library that is technically accessible but practically ignored, because the cataloging system was abandoned in the 1400s and finding anything requires either extreme patience or luck.',
+      'The book is thin, bound in something that isn\'t quite leather. On the cover, stamped in tarnished gilt: "On the Seventh Binding — A History of the Forsaken Pact."',
+      'You have heard of the Forsaken Pact only in passing — in two footnotes and one very vague reference in a legal text about restricted magics. Most students don\'t know it exists.',
+      'You open it.',
+      {type:'emphasis',text:'By the third page you understand why this book is hidden rather than banned. Banned things get sought. Hidden things get forgotten. What it describes — what was done, seven hundred years ago, to ensure the stability of the realm — it is the kind of thing that once known cannot be unknowed.'},
+      {type:'dialogue',text:'You should not be reading that.',speaker:'A voice, behind you'},
+    ],
+    choices:[
+      {text:'You close the book and turn around slowly. "And yet."',effect:'+1 Wit, +1 Grit · Discovery: The Forsaken Pact · Trait: Truth-Seeker',action:'secret_confront'},
+      {text:'You already memorized what mattered. You close it and hand it over without looking up.',effect:'+1 Will, +1 Perception · Discovery: The Pact (partial) · Trait: Careful',action:'secret_careful'},
+      {text:'"Sit down," you say. "You clearly know what this is. Tell me the rest."',effect:'+2 Wit · Discovery: The Full Truth · New Relationship: The Archivist',action:'secret_push'},
+    ],
+  },
+  {
+    id:'romance',location:'The Academy Gardens · Autumn · Academy Year Two',title:'The Complication You Did Not Plan For',
+    paragraphs:[
+      'It is autumn and the Academy gardens are the kind of beautiful that make studying indoors feel like a moral failing. You are out there with a book, failing to study, when someone sits near you on the bench.',
+      "Their name is Emiel. They transferred here at the start of second year from the Westmarch Academy, which closed under circumstances no one will discuss openly. They are funny in a quiet way and read the subtext of rooms like most people read printed words.",
+      'They have been aware of you, you realize, for some time. In the way that means something.',
+      {type:'dialogue',text:"I've been trying to decide whether to tell you something. I'm deciding yes.",speaker:'Emiel'},
+      {type:'dialogue',text:"I saw you in the archive two nights ago. With the Binding book. And I know what it says. I know what it means for students of your lineage specifically. And I think — I think you deserve to know that I know. Rather than finding out later that someone was watching.",speaker:'Emiel'},
+      {type:'emphasis',text:'The candor of it is extraordinary. You feel suddenly both seen and very slightly alarmed.'},
+    ],
+    choices:[
+      {text:'"Why are you telling me? What do you want?"',effect:'+1 Perception · Relationship: Emiel (cautious)',action:'romance_wary'},
+      {text:'"What do you know about my lineage specifically?" This is the conversation you\'ve been waiting for.',effect:'+1 Wit · Discovery: Lineage Secret · Relationship: Emiel (trust building)',action:'romance_ask'},
+      {text:'You ask them to walk with you. This is too important for a bench.',effect:'+1 Influence · Relationship: Emiel (deepening)',action:'romance_walk'},
+      {text:'"Thank you for telling me." Simple. Direct. You mean it.',effect:'+1 Will · Relationship: Emiel (warm)',action:'romance_thank'},
+    ],
+  },
+  {
+    id:'cost_of_knowing',location:"Tessaveth's Office · Academy Year Two",title:'The Truth the Mentor Kept',
+    paragraphs:[
+      'You confront Tessaveth.',
+      "You don't do it loudly — you've thought about it for three weeks and you've decided quiet is better. You go to her office hours and sit down and say what you know and what you need to know.",
+      'She is quiet for a long time. Then she gets up and closes the door.',
+      {type:'dialogue',text:"I knew this day would come. I had arguments prepared. Then you walked in and they all disappeared, because you're looking at me the way I used to look at my own mentor, and I remember what that felt like, and I won't insult you by delivering speeches.",speaker:'Tessaveth'},
+      {type:'dialogue',text:"The Forsaken Pact was a binding of seven bloodlines to a sleeping power beneath the realm. A containment agreement. Three hundred years old. It requires renewal — a willing participant from each bloodline, once per generation. The last renewal was sixty years ago. And you, child, are your bloodline's heir.",speaker:'Tessaveth'},
+      {type:'emphasis',text:'You sit with that. The thing the seer at your name-day saw. The warmth of the stone. The candleflame. The hovering stone in the garden. Not power, exactly. Or not only power. A key. A lock. Both at once.'},
+    ],
+    choices:[
+      {text:'"Will it kill me?" You need the simplest answer first.',effect:'+1 Grit · Discovery: The Cost (partial) · Trait: Unflinching',action:'cost_ask_death'},
+      {text:'"Is there a way out?" You are your parent\'s child. There is always another angle.',effect:'+1 Wit · Discovery: The Alternative · Sets up final arc',action:'cost_seek_out'},
+      {text:'"Tell me everything. All of it. Right now."',effect:'+2 Will · Discovery: The Full Pact · New Quest begins',action:'cost_all'},
+    ],
+  },
+  {
+    id:'final_exam',location:'The Examination Halls · Academy Year Three',title:'The Trial of Three Crucibles',
+    paragraphs:[
+      "In your final year, the Academy holds its Crucible examinations — three trials that determine your graduating rank and your assignment to a post in the realm.",
+      "But you know now that your graduation is secondary. What comes after — the Pact, the binding, the sleeping power beneath the world — that is the actual examination. The one no faculty member can grade.",
+      'Before the Crucible begins, Tessaveth finds you in the corridor.',
+      {type:'dialogue',text:"Whatever you've decided — about the Pact, about what comes next — I want you to pass the Crucible first. Not because of rank. Because you deserve to know what you're capable of. You've earned the right to walk out of here with your head up.",speaker:'Tessaveth'},
+      'The first door opens. Inside: three examiners, a crystal lens, and three hours.',
+    ],
+    choices:[
+      {text:"You enter with everything you've learned — all three years, every choice, every memory.",effect:'+1 to highest stat · Trait: Crucible-Forged',action:'crucible_enter'},
+    ],
+  },
+  {
+    id:'graduation_choice',
+    isDynamic:true, dynamicKey:'graduation',
+    location:'placeholder',title:'placeholder',paragraphs:[],choices:[],
+  },
+  {
+    id:'reckoning',location:"Beneath the Academy · The Deep Chamber · Age 19",title:'The Reason for All of It',
+    paragraphs:[
+      "The entrance to the Deep Chamber is in the oldest part of the Academy's foundation — a door that only opens when the Pact-heir stands before it and wants to enter.",
+      'It opens for you.',
+      "Inside is not what you expected. Not a prison, not a wound in the world. A hall of light and silence, and at its center, a shape that has been sleeping for sixty years and now — very slowly — opens its eyes.",
+      {type:'emphasis',text:'What is below the world is not a monster. It is a question. The question is very old, and very simple, and it has been waiting for someone of your blood to come stand before it and answer.'},
+      {type:'dialogue',text:'Child of the seventh line. Heir of the binding. I do not want a jailer. I want to ask you something, and I want you to answer freely, without the Pact, without compulsion. Will you hear my question?',speaker:'The Sleeping Power'},
+    ],
+    choices:[{text:'"Ask."',effect:'Continue to the Final Answer',action:'reckoning_ask'}],
+  },
+  {
+    id:'the_question',location:'The Deep Chamber',title:'The Question That Was Always Yours to Answer',
+    paragraphs:[
+      {type:'dialogue',text:"The realm above has bound me here for three centuries with the argument that I am too large for it, that I would unmake it without meaning to. This may be true. But the binding was never renewed by someone who knew what I actually was. Only by people who feared what they imagined I was. So: knowing what I am — not a weapon, not a catastrophe, but a presence, a power, an ancient thing that loves this world in the way that mountains love it — would you renew the binding freely? Or release it?",speaker:'The Sleeping Power'},
+      {type:'emphasis',text:'You have everything you have ever learned. Every memory. Every person you love. Every truth you found in the archive. Every lesson Tessaveth gave you. Every scar from every duel. Every night wondering what you were for.'},
+      'This is what it was all for.',
+    ],
+    choices:[
+      {text:'You renew the binding — freely, this time. A covenant rather than a cage.',effect:'Ending: The Renewed Covenant',action:'end_renew'},
+      {text:'You release it — with conditions. A new agreement, between equals.',effect:'Ending: The New Pact',action:'end_release'},
+      {text:'You ask it what it wants. Truly. Because no one has.',effect:'Ending: The Question Returned',action:'end_ask',requires:{trait:'Truth-Seeker',desc:'Truth-Seeker trait required'}},
+      {text:'You tell it to wait while you go bring the people you trust. This is not a decision made alone.',effect:'Ending: The Shared Reckoning',action:'end_together',requires:{choice:'has_allies',desc:'Requires relationships built during the Academy'}},
+    ],
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// CHOICE HANDLER
+// ═══════════════════════════════════════════════════════════════
+function makeChoice(idx) {
+  var scene = getCurrentScene();
+  if (!scene||!scene.choices) return;
+  var choice = scene.choices[idx];
+  if (!choice) return;
+  var postDuelActions = ['duel_win_grace','duel_win_silent','duel_lose_soon','duel_lose_train'];
+  if (postDuelActions.indexOf(choice.action)>=0) { duelOutcome(choice.action); return; }
+  if (choice.action==='graduation_present'||choice.action==='graduation_prepare'||choice.action==='graduation_tessaveth') { handleGraduationChoice(choice.action); return; }
+  handleAction(choice.action, scene, idx);
+}
+
+function handleAction(action, scene, idx) {
+  var outcomes = {
+    // INFANCY
+    infancy_reach_flame:{text:"Your tiny hand opens toward the flame. It does not burn you. It bends — almost imperceptibly — in your direction. Your parent doesn't notice. But the nurse does, and she will remember this for twenty years.",gains:[{type:'stat',label:'+1 Magic'},{type:'mem',label:'Memory: The First Reaching'}],statChanges:[{stat:'Magic',amount:1}],newMemories:[{label:'Infancy',text:'You reached for a flame, and it came toward you.'}],setChoice:{key:'first_action',value:'flame'},btnLabel:'The world is interesting.'},
+    infancy_reach_voice:{text:"You find the voice. You hold it with your eyes. The woman above you — your parent — sees your gaze fix on her face with an intensity that makes her laugh through tears. \"Hello,\" she says. \"Hello, you.\"",gains:[{type:'stat',label:'+1 Influence'},{type:'mem',label:'Memory: First Recognition'}],statChanges:[{stat:'Influence',amount:1}],newMemories:[{label:'Infancy',text:"You found your parent's face before anything else."}],setChoice:{key:'first_action',value:'voice'},btnLabel:'There are people worth watching.'},
+    infancy_watch:{text:'You watch everything. The room, the shadows, the faces above you. You are the quietest infant anyone has ever seen — not unhappy, just observant, as if cataloging the world before deciding what to do with it.',gains:[{type:'stat',label:'+1 Perception'},{type:'mem',label:'Memory: The Watching Infant'}],statChanges:[{stat:'Perception',amount:1}],newMemories:[{label:'Infancy',text:'Your first instinct was to watch, not reach. You remember almost everything.'}],setChoice:{key:'first_action',value:'watch'},btnLabel:'Good. Now you know where everything is.'},
+    firstword_light:{text:'"Light," you say. Just that. Your parent freezes. The nurse drops something. Light comes through the window and, very gently, you hold your hand up to meet it.',gains:[{type:'stat',label:'+1 Magic +1 Will'},{type:'trait',label:'Trait: Light-Born'}],statChanges:[{stat:'Magic',amount:1},{stat:'Will',amount:1}],newTraits:[{name:'Light-Born',color:'gold'}],newMemories:[{label:'First Word',text:'You said "light" and held your hand toward the morning sun.'}],btnLabel:'Language is just another kind of light.'},
+    firstword_more:{text:'"More," you say. The cup is empty. Your parent fills it. You drink and say it again. More. They fill it again. You will, they will realize over the next decade, always want more — but not greedily. Hungrily.',gains:[{type:'stat',label:'+1 Grit +1 Influence'},{type:'trait',label:'Trait: Never Satisfied'}],statChanges:[{stat:'Grit',amount:1},{stat:'Influence',amount:1}],newTraits:[{name:'Never Satisfied',color:'crimson'}],btnLabel:'It is always just the beginning.'},
+    firstword_why:{text:'"Why." Not a question. You say it at the ceiling, at the window, at your own hand. Your parent finds it charming. Master Bellum, who hears the story years later, calls it "the most honest first word I\'ve ever been told about."',gains:[{type:'stat',label:'+1 Wit +1 Perception'},{type:'trait',label:'Trait: The Question'}],statChanges:[{stat:'Wit',amount:1},{stat:'Perception',amount:1}],newTraits:[{name:'The Question',color:'azure'}],btnLabel:'Why is always the right word.'},
+    firstword_mine:{text:'"Mine." The blanket is yours. The cup is yours. Eventually: the future is yours, the world is yours, which is not greed so much as the profound certainty that you intend to hold on.',gains:[{type:'stat',label:'+1 Strength +1 Grit'},{type:'trait',label:'Trait: Iron Grip'}],statChanges:[{stat:'Strength',amount:1},{stat:'Grit',amount:1}],newTraits:[{name:'Iron Grip',color:'ink'}],btnLabel:'Hold on. Always.'},
+    omen_keep:{text:"You keep the stone. You carry it in your small fist through the rest of the feast and put it under your pillow that night. In the morning the symbol on it is different — slightly. You are three years old and you already know some things are too important to give away.",gains:[{type:'lore',label:'Discovery: The Dark Stone'},{type:'mem',label:"Memory: The Seer's Warning"}],newDiscoveries:[{title:'The Dark Stone',text:'A disc of warm dark stone, marked with a symbol that changes — slowly. Given by a wandering seer who singled you out of a crowd of adults.'}],newMemories:[{label:'Age 3',text:'A seer at your Name-Day feast saw something in you. She left a stone. You kept it.'}],setChoice:{key:'has_stone',value:true},btnLabel:'Some gifts are not meant to be returned.'},
+    omen_give:{text:'You hand it over. The relief in the room is immediate and general. Your parent puts it on a high shelf and later, you notice, it disappears. You will wonder about the seer\'s words for years — carefully, and privately.',gains:[{type:'stat',label:'+1 Influence'},{type:'trait',label:'Trait: Caution'}],statChanges:[{stat:'Influence',amount:1}],newTraits:[{name:'Caution',color:'ink'}],btnLabel:"Let others think you've forgotten."},
+    omen_study:{text:'You stare at the symbol for forty-five seconds — which is a long time for a three-year-old — before your parent takes the stone gently from your hand. You have the symbol memorized. You draw it in the dust of your windowsill that evening and stare at it.',gains:[{type:'stat',label:'+1 Wit'},{type:'lore',label:"Discovery: The Seer's Symbol"}],statChanges:[{stat:'Wit',amount:1}],newDiscoveries:[{title:"The Seer's Symbol",text:'A mark that predates the current alphabets. You saw it at age 3 and still remember it exactly.'}],setChoice:{key:'knows_symbol',value:true},btnLabel:'What you memorize, no one can take.'},
+    // CHILDHOOD
+    lesson_compass:{text:"\"It always finds north,\" you say. \"Even when you don't want it to.\" Master Bellum stops moving. He looks at you with an expression between surprise and delight. He picks up the compass and holds it toward you. \"Keep it,\" he says. \"As a reminder.\"",gains:[{type:'stat',label:'+1 Wit +1 Will'},{type:'mem',label:"Memory: Bellum's Lesson"}],statChanges:[{stat:'Wit',amount:1},{stat:'Will',amount:1}],newMemories:[{label:'Age 6',text:"Master Bellum gave you his compass. You said it always finds north even when you don't want it to."}],setChoice:{key:'tutor_bond',value:'compass'},btnLabel:'North is north. The rest is navigation.'},
+    lesson_candle:{text:"\"It's afraid of being snuffed.\" Master Bellum makes a small sound. He writes something in his notebook — you can see the word he writes: potential. \"And what,\" he asks, \"does afraid teach us?\" You think for a moment. \"To burn harder,\" you say.",gains:[{type:'stat',label:'+1 Magic +1 Perception'},{type:'mem',label:"Memory: Bellum's Candle"}],statChanges:[{stat:'Magic',amount:1},{stat:'Perception',amount:1}],newMemories:[{label:'Age 6',text:'Bellum asked what afraid teaches. You said: burn harder.'}],setChoice:{key:'tutor_bond',value:'candle'},btnLabel:'Burn harder.'},
+    lesson_sword:{text:"\"It's for decisions,\" you say. \"The kind words can't make.\" Master Bellum puts it down, pushes everything to the side. \"Good,\" he says. \"Now we can begin.\" What he means, you will understand later, is that you already know something true.",gains:[{type:'stat',label:'+1 Strength +1 Grit'},{type:'mem',label:"Memory: Bellum's Blade"}],statChanges:[{stat:'Strength',amount:1},{stat:'Grit',amount:1}],newMemories:[{label:'Age 6',text:'You chose the sword. Bellum said: "Now we can begin."'}],setChoice:{key:'tutor_bond',value:'sword'},btnLabel:'Some things must be decided.'},
+    friend_follow:{text:"You follow Lira for the entire afternoon. She knows the market the way you know the estate library — instinctively, with authority. By evening you have eaten three things you couldn't name and learned that Lira speaks to everyone as if they are worth knowing. It is genuinely infectious.",gains:[{type:'rel',label:'Relationship: Lira (friend)'},{type:'stat',label:'+1 Influence'}],statChanges:[{stat:'Influence',amount:1},{stat:'Wit',amount:1}],newRelationships:[{name:'Lira',role:"Best friend — bookbinder's daughter",heart:'friend',note:'She navigates the world without fear of it. You try to learn this from her.'}],newMemories:[{label:'Age 7',text:'Lira taught you the market. She spoke to everyone as if they mattered. They did.'}],setChoice:{key:'lira_met',value:true},btnLabel:'This is what a friend is.'},
+    friend_race:{text:'She wins, barely, and you are furious and delighted in equal measure. She buys the pastries because she won and shares them anyway because that\'s who she is. You have made a friend.',gains:[{type:'rel',label:'Relationship: Lira (friend/rival)'},{type:'stat',label:'+1 Grit'}],statChanges:[{stat:'Grit',amount:1}],newRelationships:[{name:'Lira',role:"Best friend — bookbinder's daughter",heart:'friend',note:'She beat you in a race and it was the best thing that happened that year.'}],setChoice:{key:'lira_met',value:true},btnLabel:'Running with someone is better than running alone.'},
+    friend_read:{text:'She thinks about this for a serious amount of time. Then: "The Wandering Cartography. It\'s a book about a mapmaker who realizes she\'s been mapping the wrong world." You have never heard of it. By the time you get home you are already trying to find a copy.',gains:[{type:'rel',label:'Relationship: Lira (close friend)'},{type:'lore',label:'Discovery: The Wandering Cartography'},{type:'stat',label:'+1 Wit'}],statChanges:[{stat:'Wit',amount:1}],newRelationships:[{name:'Lira',role:"Best friend — bookbinder's daughter",heart:'friend',note:"She told you about a book that changed how you see maps. You tell each other everything."}],newDiscoveries:[{title:'The Wandering Cartography',text:"A rare book about mapping the wrong world. Lira's favorite. Worth finding."}],setChoice:{key:'lira_met',value:true},btnLabel:'Books lead to other books.'},
+    magic_again:{text:'It takes you eleven tries and a great deal of sitting very still and breathing carefully. But by the end of the evening you can float a stone reliably. Nothing larger than a fist. Nothing further than five feet. But reliably.',gains:[{type:'stat',label:'+2 Magic'},{type:'trait',label:'Trait: Hungry for Power'},{type:'lore',label:'Spell: Levitation (crude)'}],statChanges:[{stat:'Magic',amount:2}],newTraits:[{name:'Hungry for Power',color:'crimson'}],newSpells:[{name:'Levitation (Crude)',desc:'Float small objects. Range 5ft. Unreliable in strong winds.'}],newMemories:[{label:'Age 8',text:'You learned to levitate a stone by trying eleven times in a single evening.'}],setChoice:{key:'first_magic',value:'practiced'},btnLabel:'Understanding is worth any number of tries.'},
+    magic_tell:{text:"Your parent listens without interrupting. When you finish they are quiet for a moment. Then: \"I know. We've been waiting for you to find out for yourself.\" They tell you that the Academy will know — that in fact they already have a letter prepared. That this was always the plan.",gains:[{type:'rel',label:'Parent (trust deepened)'},{type:'stat',label:'+1 Influence +1 Will'},{type:'lore',label:'Discovery: The Prepared Letter'}],statChanges:[{stat:'Influence',amount:1},{stat:'Will',amount:1}],newDiscoveries:[{title:'The Prepared Letter',text:'Your parent had a letter to the Academy ready. They knew your power would emerge. They were waiting for you to discover it yourself.'}],setChoice:{key:'first_magic',value:'told'},btnLabel:'They were waiting for you to find yourself.'},
+    magic_restrain:{text:'You carry the two halves of the stone in your pocket for the rest of your childhood. You learn everything you can about control, theory, practice — before you ever try to use the power again. When you finally do, years later, it is with precision.',gains:[{type:'stat',label:'+2 Will'},{type:'trait',label:'Trait: The Restrained'},{type:'mem',label:'Memory: The Promise'}],statChanges:[{stat:'Will',amount:2}],newTraits:[{name:'The Restrained',color:'azure'}],newMemories:[{label:'Age 8',text:'You broke a stone and made yourself a promise: not until you understand it.'}],setChoice:{key:'first_magic',value:'restrained'},btnLabel:'Patience is also a kind of power.'},
+    magic_laugh:{text:'It is the right response. The laughter breaks the spell of fear that might otherwise have formed. You pick up the cracked stone, stick it in your pocket like a trophy, and go inside for supper with the specific contentment of someone who has just discovered something wonderful about themselves.',gains:[{type:'stat',label:'+1 Magic +1 Grit'},{type:'trait',label:'Trait: Laughing at Thunder'}],statChanges:[{stat:'Magic',amount:1},{stat:'Grit',amount:1}],newTraits:[{name:'Laughing at Thunder',color:'gold'}],setChoice:{key:'first_magic',value:'laughed'},btnLabel:'The world is strange and that is its gift.'},
+    rival_cold:{text:"He reads your smile exactly correctly. For a fraction of a second — you are watching, you see it — something shifts in his composure. Then it's back. \"Looking forward to it as well,\" he says. You shake hands. Both of you understand the rules of this game now.",gains:[{type:'stat',label:'+1 Influence +1 Will'}],statChanges:[{stat:'Influence',amount:1},{stat:'Will',amount:1}],newMemories:[{label:'Age 10',text:'Kastor Vael called your magic wild. You gave him nothing. The war is on.'}],setChoice:{key:'rival_approach',value:'cold'},btnLabel:'Cold is colder than angry.'},
+    rival_honest:{text:'"You\'re right. For now." He has excellent composure and it almost holds. You walk away before he can respond. Behind you, you can feel him watching. You have given him something to think about.',gains:[{type:'stat',label:'+1 Grit'}],statChanges:[{stat:'Grit',amount:1}],setChoice:{key:'rival_approach',value:'honest'},btnLabel:'Mean it when you say it.'},
+    rival_learn:{text:'"Show me something," you say. "You\'ve already made your point. Now show me if it\'s worth anything." He does — it is. You hate that it is. But you learn from it, and you are better for it.',gains:[{type:'stat',label:'+1 Wit +1 Magic'}],statChanges:[{stat:'Wit',amount:1},{stat:'Magic',amount:1}],setChoice:{key:'rival_approach',value:'learn'},btnLabel:'Even rivals can teach.'},
+    study_magic:{text:'You practice every morning for three years. Your control improves dramatically. Your power develops a signature — the specific color and texture of your magic — that Archmage Tessaveth will recognize the moment she sees it.',gains:[{type:'stat',label:'+2 Magic +1 Will'},{type:'trait',label:'Trait: The Devoted Mage'},{type:'lore',label:'Spell: Shieldform'}],statChanges:[{stat:'Magic',amount:2},{stat:'Will',amount:1}],newTraits:[{name:'The Devoted Mage',color:'azure'}],newSpells:[{name:'Shieldform',desc:'Aetheric defensive shell. Reflects minor spells. Holds 30 seconds at full strength.'}],setChoice:{key:'study_focus',value:'magic'},btnLabel:'Three years of mornings. Worth every one.'},
+    study_lore:{text:'You read until your eyes ache and then you read more. You become fluent in two dead languages and find, in the restricted section of your family\'s library, a reference that will become very important later.',gains:[{type:'stat',label:'+2 Wit +1 Perception'},{type:'trait',label:'Trait: Deep Reader'},{type:'lore',label:'Discovery: The Restricted Reference'}],statChanges:[{stat:'Wit',amount:2},{stat:'Perception',amount:1}],newTraits:[{name:'Deep Reader',color:'forest'}],newDiscoveries:[{title:'The Restricted Reference',text:'A footnote in an old legal text mentions the Forsaken Pact — the first thread.'}],setChoice:{key:'study_focus',value:'lore'},btnLabel:'What you find, you keep.'},
+    study_combat:{text:"You train with the household guard until they run out of things to teach you, and then with a retired soldier your parent hires specifically. By fourteen you move differently than your peers — with economy, purpose, the unconscious efficiency of someone who has practiced the same thousand motions a thousand times.",gains:[{type:'stat',label:'+2 Strength +1 Grit'},{type:'trait',label:'Trait: Steel and Sweat'}],statChanges:[{stat:'Strength',amount:2},{stat:'Grit',amount:1}],newTraits:[{name:'Steel and Sweat',color:'ink'}],setChoice:{key:'study_focus',value:'combat'},btnLabel:'The body remembers what the mind forgets.'},
+    study_social:{text:"You become fluent in rooms. By thirteen you can walk into any gathering and know within ten minutes what everyone wants and who's pretending.",gains:[{type:'stat',label:'+2 Influence +1 Wit'},{type:'trait',label:'Trait: The Diplomat'}],statChanges:[{stat:'Influence',amount:2},{stat:'Wit',amount:1}],newTraits:[{name:'The Diplomat',color:'gold'}],setChoice:{key:'study_focus',value:'social'},btnLabel:'People are the most readable text there is.'},
+    eve_know:{text:'They hold your gaze for a moment. Then they nod slowly. "Yes," they say. "I believe you do." You sit in the kitchen until the candle burns low and outside the stars wheel through their ancient arrangements and you feel, for the first time, genuinely ready.',gains:[{type:'stat',label:'+1 Will'},{type:'mem',label:'Memory: The Last Night'}],statChanges:[{stat:'Will',amount:1}],newMemories:[{label:'Age 15',text:'The night before the Academy. Your parent said "I believe you do." The candle burned low.'}],btnLabel:'Into the carriage. Into the future.'},
+    eve_push:{text:"They tell you. Not everything — there are things they themselves don't know — but enough. Enough for you to board the carriage tomorrow with eyes open.",gains:[{type:'stat',label:'+1 Wit +1 Perception'},{type:'lore',label:'Discovery: A Family Secret'}],statChanges:[{stat:'Wit',amount:1},{stat:'Perception',amount:1}],newDiscoveries:[{title:'A Family Secret',text:'Your parent told you the first truth on the last night. Not all of it. But enough to make everything else legible.'}],setChoice:{key:'knows_family_secret',value:true},btnLabel:'Now you can go.'},
+    eve_hold:{text:"You hold their hand. They hold yours. The kitchen settles around you — the smell of tea and wood smoke and the particular warmth of a place that has been home for fifteen years. You are committing it to memory. You will want it later.",gains:[{type:'stat',label:'+1 Grit'},{type:'rel',label:'Parent (deepened)'},{type:'mem',label:'Memory: Silence That Says Everything'}],statChanges:[{stat:'Grit',amount:1}],newMemories:[{label:'Age 15',text:"You held your parent's hand in the kitchen the night before the Academy. Neither of you spoke."}],setChoice:{key:'has_allies',value:true},btnLabel:'Carry it with you.'},
+    // ACADEMY
+    arrive_fountain:{text:"The person at the fountain is Emiel, though you don't know that yet. They look up when you approach, mark their page with a finger, and say: \"The book's not as interesting as the gate. The gate's the most honest thing I've seen since I arrived.\" You sit beside them. The conversation lasts two hours.",gains:[{type:'stat',label:'+1 Perception'},{type:'rel',label:'New: Emiel (first meeting)'}],statChanges:[{stat:'Perception',amount:1}],newRelationships:[{name:'Emiel',role:'Fellow student — transfer from Westmarch',heart:'neutral',note:"You met them at the fountain. They said the gate was the most honest thing they'd seen."}],setChoice:{key:'met_emiel',value:'fountain'},btnLabel:"Something about them felt important. It was."},
+    arrive_kastor:{text:"Kastor receives you with perfect courtesy and introduces you to two students flanking him — his cousin, and the daughter of the realm's chief arcanist. A statement of alliance, not a social introduction. You match his register exactly.",gains:[{type:'stat',label:'+1 Influence'}],statChanges:[{stat:'Influence',amount:1}],setChoice:{key:'arrival_choice',value:'kastor'},btnLabel:"The rivalry has a stage now."},
+    arrive_gate:{text:'You stand at the gate for ninety seconds and read the motto twice and feel the weight of your trunk in your hand and breathe. When you walk through, you are as present as you have ever been.',gains:[{type:'stat',label:'+1 Will'},{type:'mem',label:'Memory: The Gate — First Arrival'}],statChanges:[{stat:'Will',amount:1}],newMemories:[{label:'Age 16',text:'You stood at the gate of the Academy. "What you bring in is not what you carry out." You breathed once and entered.'}],btnLabel:'The gate closes behind you.'},
+    arrive_library:{text:"You find the archive before anyone. In the deepest stacks, you notice a door that is not on the map. You note it and leave. You will come back.",gains:[{type:'stat',label:'+1 Wit'},{type:'lore',label:'Discovery: The Unmapped Door'}],statChanges:[{stat:'Wit',amount:1}],newDiscoveries:[{title:'The Unmapped Door',text:"There is a door in the Deep Archive that isn't on any map of the Academy. You found it on your first day."}],setChoice:{key:'found_unmapped_door',value:true},btnLabel:'The best discoveries are accidental.'},
+    house_solara:{text:'The Shard turns gold. A murmur moves through the room. Solara students are scholars and healers — but also the most connected to the deep structures of magic. Tessaveth is a Solaran.',gains:[{type:'trait',label:'Trait: Solaran'},{type:'stat',label:'+1 Magic +1 Will'}],statChanges:[{stat:'Magic',amount:1},{stat:'Will',amount:1}],newTraits:[{name:'Solaran',color:'gold'}],setVar:{key:'academyHouse',value:'Solara'},btnLabel:'Gold runs through you now.'},
+    house_ignar:{text:'The Shard turns crimson. An actual cheer from the Ignar section. Ignar mages are the ones who shaped battlefields and broke sieges.',gains:[{type:'trait',label:'Trait: Ignaran'},{type:'stat',label:'+1 Strength +1 Grit'}],statChanges:[{stat:'Strength',amount:1},{stat:'Grit',amount:1}],newTraits:[{name:'Ignaran',color:'crimson'}],setVar:{key:'academyHouse',value:'Ignar'},btnLabel:'The fire finds its house.'},
+    house_abyss:{text:"The Shard turns midnight blue, and the room goes quieter than it went for any other placement. Abyss mages are rare. Their magic works on the architecture of reality rather than its surface. Kastor's composure slips, just once, when he sees the color.",gains:[{type:'trait',label:'Trait: Abyssal'},{type:'stat',label:'+1 Wit +1 Perception'}],statChanges:[{stat:'Wit',amount:1},{stat:'Perception',amount:1}],newTraits:[{name:'Abyssal',color:'azure'}],setVar:{key:'academyHouse',value:'Abyss'},btnLabel:'The deep knows you.'},
+    house_verdant:{text:'The Shard turns silver-green. Verdant magic is the oldest — life, growth, change, the slow but absolute power of things that grow. You feel the change immediately, a kind of rootedness.',gains:[{type:'trait',label:'Trait: Verdant'},{type:'stat',label:'+1 Perception +1 Grit'}],statChanges:[{stat:'Perception',amount:1},{stat:'Grit',amount:1}],newTraits:[{name:'Verdant',color:'forest'}],setVar:{key:'academyHouse',value:'Verdant'},btnLabel:'Life recognizes its own.'},
+    room_help:{text:'You reorganize their books by subject and then by date within subject and when you explain the system, Orin stares at you for a moment and then says, with absolute sincerity: "You are strange and I am glad you are my roommate."',gains:[{type:'stat',label:'+1 Wit'},{type:'rel',label:'Relationship: Orin (warm)'}],statChanges:[{stat:'Wit',amount:1}],newRelationships:[{name:'Orin',role:"Dormitory roommate — scholar's son",heart:'friend',note:"You organized his books. He called you strange and meant it as the highest compliment."}],setChoice:{key:'has_allies',value:true},btnLabel:'Strange is relative. Glad is absolute.'},
+    room_ask:{text:"He tells you. He is afraid of not being as clever as everyone here assumes he is — afraid his test scores were a ceiling, not a floor. You tell him: \"Ceilings are the worst thing about rooms.\"",gains:[{type:'stat',label:'+1 Perception'},{type:'rel',label:'Relationship: Orin (honest)'}],statChanges:[{stat:'Perception',amount:1}],newRelationships:[{name:'Orin',role:'Dormitory roommate — scholarship student',heart:'friend',note:"He told you his fear. You told him ceilings are the worst thing about rooms. You've been honest ever since."}],setChoice:{key:'has_allies',value:true},btnLabel:'The best conversations start with fear.'},
+    room_tea:{text:"He holds the cup with both hands and says, quietly, that he has not had tea since leaving home three weeks ago. \"It's a small thing,\" you say. \"Small things are the ones that hold,\" he says. He is right.",gains:[{type:'stat',label:'+1 Grit'},{type:'rel',label:'Relationship: Orin (comfortable)'}],statChanges:[{stat:'Grit',amount:1}],newRelationships:[{name:'Orin',role:"Dormitory roommate — farmer's son",heart:'friend',note:'You made him tea on the first night. He told you small things are the ones that hold. He is right.'}],setChoice:{key:'has_allies',value:true},btnLabel:'Small things are the ones that hold.'},
+    mentor_ask:{text:'"You lean toward the thing you shouldn\'t touch," she says, "and when I ask why you lean, you don\'t say fear or ambition. You say because it\'s there. That\'s the only reason that ever actually matters." She pours two cups of tea. "Sit down. We have things to discuss."',gains:[{type:'stat',label:'+1 Wit'},{type:'lore',label:'Discovery: Your True Nature'},{type:'rel',label:'Relationship: Tessaveth (mentor)'}],statChanges:[{stat:'Wit',amount:1}],newDiscoveries:[{title:'Your True Nature',text:"Tessaveth said you lean toward the forbidden not from fear or ambition, but because it's there. That's the rarest reason."}],newRelationships:[{name:'Tessaveth',role:'Archmage — Academy senior faculty',heart:'mentor',note:'She recruited you specifically. You asked the right question. Tea followed.'}],setChoice:{key:'has_allies',value:true},btnLabel:'Pour the tea. Begin.'},
+    mentor_suspect:{text:'"Good," she says. "You should be suspicious. I am asking you to become someone who can do something very difficult. Yes, there is an agenda. I believe the agenda is necessary and I believe you are the person for it. I also believe you deserve to know that upfront."',gains:[{type:'stat',label:'+1 Perception'},{type:'rel',label:'Relationship: Tessaveth (complex)'}],statChanges:[{stat:'Perception',amount:1}],newRelationships:[{name:'Tessaveth',role:'Archmage — Academy senior faculty',heart:'mentor',note:'She admitted the agenda before you could name it. You respect that, cautiously.'}],btnLabel:'Suspicion and trust can coexist.'},
+    mentor_vow:{text:'She is quiet for a moment. Then: "I know you mean it. That\'s either your greatest strength or the thing that will break you, and I intend to find out which before it matters." She writes something in her notes. "I\'ll see you in the seminar on Thursday."',gains:[{type:'stat',label:'+1 Will'},{type:'rel',label:'Relationship: Tessaveth (mentor)'}],statChanges:[{stat:'Will',amount:1}],newRelationships:[{name:'Tessaveth',role:'Archmage — Academy senior faculty',heart:'mentor',note:"You said you'd try not to disappoint her. She wrote something down. She's watching carefully."}],setChoice:{key:'has_allies',value:true},btnLabel:'Thursday, then.'},
+    secret_confront:{text:'You close the book and stand and turn and the person behind you is an ancient archivist you\'ve seen twice before in the stacks, always at dusk. "And yet," you say. They regard you for a long moment. Then they sit down. "All right," they say. "And yet."',gains:[{type:'stat',label:'+1 Wit +1 Grit'},{type:'lore',label:'Discovery: The Forsaken Pact'},{type:'trait',label:'Trait: Truth-Seeker'}],statChanges:[{stat:'Wit',amount:1},{stat:'Grit',amount:1}],newDiscoveries:[{title:'The Forsaken Pact',text:'Seven bloodlines. A sleeping power beneath the realm. A renewal required each generation. The last was sixty years ago. You are your bloodline\'s heir.'}],newTraits:[{name:'Truth-Seeker',color:'crimson'}],newRelationships:[{name:'The Archivist',role:'Deep Archive custodian — age unknown',heart:'neutral',note:'They found you reading the book. They sat down when you said "and yet."'}],btnLabel:'And yet.'},
+    secret_careful:{text:"You memorized what mattered. The Pact. The bloodlines. The renewal. You hand the book back without looking at the archivist and walk out of the archive at normal pace and sit in the courtyard for an hour processing what you now know.",gains:[{type:'stat',label:'+1 Will +1 Perception'},{type:'lore',label:'Discovery: The Pact (partial)'},{type:'trait',label:'Trait: Careful'}],statChanges:[{stat:'Will',amount:1},{stat:'Perception',amount:1}],newDiscoveries:[{title:'The Forsaken Pact (Partial)',text:"Seven bloodlines bound to contain a sleeping power. Renewal required each generation. You've read enough to know this is about you."}],newTraits:[{name:'Careful',color:'forest'}],btnLabel:'Carry it quietly until you know more.'},
+    secret_push:{text:'"Sit down. You clearly know what this is. Tell me the rest." The archivist sits. They look at you for a very long time. Then they tell you everything. It takes forty-five minutes. When they finish, you sit in silence together for a while.',gains:[{type:'stat',label:'+2 Wit'},{type:'lore',label:'Discovery: The Full Truth'},{type:'rel',label:'New: The Archivist'}],statChanges:[{stat:'Wit',amount:2}],newDiscoveries:[{title:'The Full Truth',text:'The power beneath the realm is not a monster. It is ancient and vast and lonely, bound because the realm was afraid. The Pact is three centuries of fear made law.'}],newRelationships:[{name:'The Archivist',role:'Keeper of the Deep Archive',heart:'mentor',note:"They told you everything when you asked. They've been waiting decades for someone to ask."}],btnLabel:'Now you know everything. Now what?'},
+    romance_wary:{text:'"I want you to know that I know," they say. "I have no other agenda. I\'ve spent enough time at this Academy watching people work angles that I have stopped doing it myself. It\'s exhausting and the payoff is poor." You believe them. Mostly.',gains:[{type:'stat',label:'+1 Perception'},{type:'rel',label:'Relationship: Emiel (cautious)'}],statChanges:[{stat:'Perception',amount:1}],newRelationships:[{name:'Emiel',role:'Fellow student — transfer from Westmarch',heart:'neutral',note:"They told you they knew about the book. Said they had no agenda. You mostly believe them."}],btnLabel:'Mostly is a start.'},
+    romance_ask:{text:"They tell you. What they know about your lineage — from records at Westmarch that Aelindra apparently chose not to keep — fills in exactly the gap you've been carrying. Something in your chest loosens slightly.",gains:[{type:'stat',label:'+1 Wit'},{type:'lore',label:'Discovery: Lineage Secret'},{type:'rel',label:'Relationship: Emiel (trust building)'}],statChanges:[{stat:'Wit',amount:1}],newDiscoveries:[{title:'Lineage Secret (from Emiel)',text:'Westmarch had records on your bloodline. The Aelindra Academy did not share them. Emiel did.'}],newRelationships:[{name:'Emiel',role:'Fellow student — transfer',heart:'friend',note:'They gave you information the Academy kept from you. That\'s a kind of trust.'}],setChoice:{key:'has_allies',value:true},btnLabel:'The gap closes.'},
+    romance_walk:{text:"You walk the eastern garden, once, slowly. The conversation that happens over that hour is the kind that rearranges things. By the end of the loop you know three things you didn't know before. One of them is that you want to do this again.",gains:[{type:'stat',label:'+1 Influence'},{type:'rel',label:'Relationship: Emiel (deepening)'}],statChanges:[{stat:'Influence',amount:1}],newRelationships:[{name:'Emiel',role:'Fellow student — confidant',heart:'friend',note:'You walked the garden with them. An hour. The conversation rearranged things.'}],setChoice:{key:'has_allies',value:true},btnLabel:'Some walks are longer than they appear.'},
+    romance_thank:{text:'"Thank you for telling me." You mean it simply and say it simply and Emiel seems slightly startled — as if they had prepared for more angles. Then they smile. "You\'re welcome," they say.',gains:[{type:'stat',label:'+1 Will'},{type:'rel',label:'Relationship: Emiel (warm)'}],statChanges:[{stat:'Will',amount:1}],newRelationships:[{name:'Emiel',role:'Fellow student',heart:'friend',note:'You thanked them simply. They seemed surprised. The simplicity landed.'}],setChoice:{key:'has_allies',value:true},btnLabel:'Simple things. The ones that hold.'},
+    cost_ask_death:{text:'"Not necessarily," Tessaveth says. "The previous renewals were not fatal. But they changed the participants. Significantly. And the last heir — she spent the rest of her life able to hear things no one else could. Whether that\'s a cost or a gift is not a settled question."',gains:[{type:'stat',label:'+1 Grit'},{type:'lore',label:'Discovery: The Cost (partial)'},{type:'trait',label:'Trait: Unflinching'}],statChanges:[{stat:'Grit',amount:1}],newTraits:[{name:'Unflinching',color:'ink'}],newDiscoveries:[{title:'The Cost',text:'The Pact renewal changes the heir. Not necessarily fatal. The last heir could hear things no one else could, for the rest of her life.'}],btnLabel:'Not fatal. Possibly worth it.'},
+    cost_seek_out:{text:'She is quiet for longer than you expected. Then: "There may be. But it requires something the Pact creators never considered — talking to what\'s below. Negotiating rather than binding." She chooses her next words carefully. "No one has tried. That is not the same as no one can."',gains:[{type:'stat',label:'+1 Wit'},{type:'lore',label:'Discovery: The Alternative'}],statChanges:[{stat:'Wit',amount:1}],newDiscoveries:[{title:'The Alternative',text:'The Pact could possibly be renegotiated rather than renewed. No one has tried.'}],setChoice:{key:'seeks_alternative',value:true},btnLabel:"No one has tried. That's the invitation."},
+    cost_all:{text:"She tells you everything. It takes an hour. She does not spare you the difficult parts. By the end you know exactly what you are heir to, exactly what it demands, and exactly what it might cost.",gains:[{type:'stat',label:'+2 Will'},{type:'lore',label:'Discovery: The Full Pact'}],statChanges:[{stat:'Will',amount:2}],newDiscoveries:[{title:'The Full Pact — Everything',text:'Three centuries of binding. Seven bloodlines. A sleeping power that is not a monster. A renewal that requires a willing heir. An alternative no one has taken. The choice is yours.'}],btnLabel:'You have everything. Now choose.'},
+    crucible_enter:{text:"You walk into the Crucible with everything you've ever learned. For three hours you demonstrate exactly who you have become — who you were in an infant's crib and who you are now in this examination hall. The examiners write scores. The lens records what it sees.",gains:[{type:'stat',label:'Crucible Complete'},{type:'trait',label:'Trait: Crucible-Forged'}],newTraits:[{name:'Crucible-Forged',color:'gold'}],newMemories:[{label:'Age 19 — The Crucible',text:'You walked into the Crucible with everything. For three hours, you proved who you were.'}],btnLabel:'And now: what you came for.'},
+    reckoning_ask:{text:'"Why," it says. "Why does the realm continue to bind things it fears rather than know them? Why is the answer to ancient terror always another ancient terror? I have been here for three centuries. No one has sat with me and asked what I want."',gains:[],btnLabel:'The question at the center of the world.'},
+    end_renew:{isEnding:true,endingKey:'covenant'},
+    end_release:{isEnding:true,endingKey:'release'},
+    end_ask:{isEnding:true,endingKey:'question'},
+    end_together:{isEnding:true,endingKey:'together'},
+  };
+
+  var outcome = outcomes[action];
+  if (!outcome) { advanceStory(); return; }
+  if (outcome.isEnding) { showEnding(outcome.endingKey); return; }
+
+  showOutcome(outcome, function() {
+    if (action==='crucible_enter') { advanceStory(); return; }
+    advanceStory();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DUEL SYSTEM
+// ═══════════════════════════════════════════════════════════════
+function beginDuel() {
+  duelState = {playerHp:5,enemyHp:5,playerMp:8,turn:1,over:false,winner:null,shield:false};
+  renderDuel();
+}
+
+function renderDuel() {
+  var container = document.getElementById('scene-content');
+  var pHp = Array.from({length:5},function(_,i){return '<div class="health-pip'+(i>=duelState.playerHp?' gone':'')+'"></div>';}).join('');
+  var eHp = Array.from({length:5},function(_,i){return '<div class="health-pip'+(i>=duelState.enemyHp?' gone':'')+'"></div>';}).join('');
+  var spells = [
+    {name:'Force Bolt',desc:'A direct strike.',dmg:1,cost:1,key:'bolt'},
+    {name:'Shieldform',desc:'Reduce next hit by 1.',dmg:0,cost:1,key:'shield'},
+    {name:'Mana Surge',desc:'Big hit. Costs 3.',dmg:2,cost:3,key:'surge'},
+    {name:'Feint & Strike',desc:'Counter — precise.',dmg:1,cost:2,key:'feint'},
+  ];
+  var btns = spells.map(function(s){
+    var ok = duelState.playerMp>=s.cost && !duelState.over;
+    return '<button class="spell-btn" onclick="duelAction(\''+s.key+'\')" '+(ok?'':'disabled')+'><span class="sp-name">'+s.name+'</span><span class="sp-cost">Cost: '+s.cost+'MP · '+(s.dmg>0?'Damage: '+s.dmg:'Buff')+'</span><span style="font-size:0.72rem;color:var(--ink4);font-style:italic">'+s.desc+'</span></button>';
+  }).join('');
+  container.innerHTML = '<div class="scene-header"><div class="scene-location">The Practice Courts · Month Two</div><div class="scene-title">The First Duel — '+C.name+' vs. Kastor Vael</div><div class="scene-title-line"></div></div><div class="duel-arena"><div class="duel-vs"><div class="duel-combatant"><div class="duel-name">'+C.name+'</div><div class="health-track">'+pHp+'</div><div style="font-size:0.72rem;color:var(--ink4);margin-top:4px">MP: '+duelState.playerMp+'/8</div></div><div class="duel-vs-text">⚔</div><div class="duel-combatant"><div class="duel-name">Kastor Vael</div><div class="health-track">'+eHp+'</div><div style="font-size:0.72rem;color:var(--ink4);margin-top:4px">Turn '+duelState.turn+'</div></div></div><div id="duel-log" style="font-size:0.85rem;color:var(--ink3);font-style:italic;margin-bottom:12px;min-height:40px;padding:8px;border:1px solid var(--parch4);background:rgba(255,255,255,0.3);">The duel begins. Kastor moves first, but you have first choice.</div><div class="duel-spells">'+btns+'</div></div>';
+}
+
+function duelAction(key) {
+  if (duelState.over) return;
+  var playerDmg = 0, logMsg = '';
+  if (key==='bolt') { playerDmg=1; duelState.playerMp-=1; logMsg='Your Force Bolt strikes true.'; }
+  else if (key==='shield') { duelState.shield=true; duelState.playerMp-=1; logMsg="You raise a Shieldform. Kastor's next strike will glance off."; }
+  else if (key==='surge') { playerDmg=2; duelState.playerMp-=3; logMsg="Mana Surge! Raw power crashes into Kastor's guard."; }
+  else if (key==='feint') { playerDmg=1; duelState.playerMp-=2; logMsg='You feint left, strike right. Kastor adjusts — barely too late.'; }
+  duelState.enemyHp -= playerDmg;
+  if (duelState.enemyHp<=0) { duelState.over=true; duelState.winner='player'; endDuel('player',logMsg); return; }
+  var kastorMoves = [
+    {dmg:1,msg:"Kastor's classical Bolt lands cleanly."},
+    {dmg:1,msg:'Kastor advances and strikes with precise form.'},
+    {dmg:2,msg:"Kastor unleashes a technique you haven't seen — complex and fast. It hurts."},
+    {dmg:0,msg:'Kastor deflects and repositions. Neither of you scores.'},
+  ];
+  var km = kastorMoves[Math.floor(Math.random()*kastorMoves.length)];
+  var kd = km.dmg;
+  if (duelState.shield) { kd=Math.max(0,kd-1); duelState.shield=false; }
+  duelState.playerHp -= kd;
+  duelState.turn++;
+  var fullLog = logMsg+' — '+km.msg;
+  var logEl = document.getElementById('duel-log');
+  if (logEl) logEl.textContent = fullLog;
+  if (duelState.playerHp<=0) { duelState.over=true; duelState.winner='kastor'; endDuel('kastor',fullLog); return; }
+  setTimeout(renderDuel,300);
+}
+
+function endDuel(winner, lastLog) {
+  var result = winner==='player';
+  C.choices['duel_kastor'] = result?'won':'lost';
+  if (result) { C.stats.Magic=(C.stats.Magic||0)+1; } else { C.stats.Grit=(C.stats.Grit||0)+1; }
+  addMemory('Academy Year 1 — The Duel', result?'You defeated Kastor Vael in the second practice duel. The crowd went quiet.':'You lost to Kastor Vael in the second practice duel. You trained alone for two hours afterward.');
+  var afterScene;
+  if (result) {
+    afterScene = {
+      location:'The Practice Courts — After',title:'After the First Victory',
+      paragraphs:['Kastor Vael concedes with perfect grace — the hand on the heart, the slight bow. The watching crowd is quiet for one second and then not.',{type:'dialogue',text:"Well fought. You're still wild. But wild lands harder than I expected.",speaker:'Kastor Vael'},"He means it as a compliment. You almost believe him. The relationship between you shifts — still rivalry, but with a new register beneath it."],
+      choices:[
+        {text:'Accept the compliment. "You\'re better than I expected too."',effect:'+1 Influence · Rival: Kastor (respect)',action:'duel_win_grace'},
+        {text:'Say nothing. Let the win speak.',effect:'+1 Will · Rival: Kastor (awed)',action:'duel_win_silent'},
+      ],
+    };
+  } else {
+    afterScene = {
+      location:'The Practice Courts — After',title:'After the First Loss',
+      paragraphs:['The duel ends when your last point falls. Kastor pauses before he walks away.',{type:'dialogue',text:"You're better than your scores suggested. You'll be a problem for me eventually. I'd rather know when.",speaker:'Kastor Vael'},{type:'emphasis',text:'It is either a warning or a compliment. Possibly both. You file it away.'}],
+      choices:[
+        {text:'"Sooner than you think."',effect:'+1 Grit · Rival: Kastor (wary)',action:'duel_lose_soon'},
+        {text:'You say nothing and go to the practice courts alone. For two hours.',effect:'+1 Magic · Rival: Kastor (underestimating you)',action:'duel_lose_train'},
+      ],
+    };
+  }
+  setTimeout(function(){ _overrideScene = afterScene; renderScene(afterScene); }, 400);
+}
+
+function duelOutcome(action) {
+  var outcomes = {
+    duel_win_grace:{text:'"Better than I expected." You mean it. Kastor holds the look for a moment. Then nods. The rivalry upgrades itself.',gains:[{type:'rel',label:'Rival: Kastor (respect)'}],statChanges:[{stat:'Influence',amount:1}],setChoice:{key:'kastor_status',value:'respect'},btnLabel:'Better. Both of you.'},
+    duel_win_silent:{text:'You walk past him. Let the win be the statement. Kastor watches you go. In the faculty observation box, Tessaveth writes something down.',gains:[{type:'rel',label:'Rival: Kastor (awed)'},{type:'stat',label:'+1 Will'}],statChanges:[{stat:'Will',amount:1}],setChoice:{key:'kastor_status',value:'awed'},btnLabel:'Silence lands hardest.'},
+    duel_lose_soon:{text:'"Sooner than you think." The words land. Kastor nods, once, with what might be genuine respect. "I\'ll be ready," he says. "Good," you say. You\'re already planning.',gains:[{type:'stat',label:'+1 Grit'},{type:'rel',label:'Rival: Kastor (wary)'}],statChanges:[{stat:'Grit',amount:1}],setChoice:{key:'kastor_status',value:'wary'},btnLabel:'Planning is already fighting.'},
+    duel_lose_train:{text:'Two hours. Alone. The technique Kastor used that you couldn\'t counter. You break it down, rebuild it, find the angle. When you leave the practice courts, you can almost do it. By the next month, you can.',gains:[{type:'stat',label:'+1 Magic'},{type:'rel',label:'Rival: Kastor (underestimating)'}],statChanges:[{stat:'Magic',amount:1}],setChoice:{key:'kastor_status',value:'underestimating'},btnLabel:'The loss became a lesson.'},
+  };
+  var out = outcomes[action];
+  if (out) showOutcome(out, function(){
+    _overrideScene = null; // clear the post-duel override
+    arcIndex = 5; // the_secret
+    C.age = 17;
+    updateBanner();
+    var next = getCurrentScene();
+    if (next) renderScene(next);
+    updateProgress();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GRADUATION
+// ═══════════════════════════════════════════════════════════════
+function buildGraduationScene() {
+  var won = C.choices['duel_kastor']==='won';
+  var hasEmiel = !!C.relationships['Emiel'];
+  var hasOrin = !!C.relationships['Orin'];
+  var paras = [
+    'You graduate with honors — the Crucible scores are posted in the main corridor and yours are in the top five of your year. Kastor Vael is in the top three.',
+    won ? 'He finds you in the courtyard before the ceremony. "You deserved it," he says. "This year." You both understand this is the most honest either of you will ever be with the other. It is enough.' : 'He finds you in the corridor after the scores go up. Neither of you says anything. You stand side by side reading the board. Then he says, very quietly: "Next year will be different." You say: "I know."',
+    "Tessaveth speaks last at the ceremony. You do not hear most of it because you are thinking about the chamber beneath the Academy and what waits there. When she says your name you stand and walk to the front and receive your scroll and do not look at her because if you look at her you will lose your composure.",
+  ];
+  if (hasEmiel) paras.push("Emiel finds you afterward, in the noise and celebration. \"What happens next?\" they ask. You tell them everything, in brief, standing in a crowd. They don't look afraid. That means something.");
+  if (hasOrin) paras.push("Orin shakes your hand with both of his. \"You were the strangest person I've ever roomed with,\" he says. \"I mean that as the highest possible compliment.\" You know he does.");
+  paras.push({type:'emphasis',text:"Tomorrow morning, you will go beneath the Academy. Tonight, you let it be the night it is — a room full of people who made you, celebration and noise and the specific gold of a ceremony held in morning light. You will want this memory later."});
+  return {
+    location:'The Great Hall · Graduation Day · Age 19',title:'The Day You Leave',
+    paragraphs:paras,
+    choices:[
+      {text:'Tonight you are here, fully, in this room with these people.',effect:'+1 Will · Memory: Graduation Day',action:'graduation_present'},
+      {text:"You find a quiet corner and use the last hours to prepare — what you'll say, what you'll ask.",effect:'+1 Wit · Ready for the Reckoning',action:'graduation_prepare'},
+      {text:'You find Tessaveth and say thank you. Just that.',effect:'+1 Grit · Mentor memory sealed',action:'graduation_tessaveth'},
+    ],
+  };
+}
+
+function handleGraduationChoice(action) {
+  var outcomes = {
+    graduation_present:{text:"You stay. You are present — fully, properly. The room holds you and you let it. When you leave tomorrow morning, you will carry this night with you like a lamp.",gains:[{type:'mem',label:'Memory: Graduation Night'}],statChanges:[{stat:'Will',amount:1}],newMemories:[{label:'Age 19 — Graduation',text:'You were present. You stayed. You let it matter.'}],btnLabel:'Into the chamber. Into tomorrow.'},
+    graduation_prepare:{text:'You sit in the courtyard with a candle and your thoughts. By midnight you know what you will say and what you will ask.',gains:[{type:'stat',label:'+1 Wit'}],statChanges:[{stat:'Wit',amount:1}],btnLabel:'You are ready.'},
+    graduation_tessaveth:{text:"You find her by the faculty doors. You say: \"Thank you.\" She looks at you for a moment and then says: \"Don't thank me yet. See what you do tomorrow. Then thank me.\" You nod.",gains:[{type:'mem',label:'Memory: The Last Thank You'}],statChanges:[{stat:'Grit',amount:1}],newMemories:[{label:'Age 19',text:'"Don\'t thank me yet. See what you do tomorrow." — Tessaveth, on graduation night.'}],btnLabel:'Tomorrow, then.'},
+  };
+  var out = outcomes[action];
+  if (out) showOutcome(out, function(){ arcIndex++; var next=getCurrentScene(); if(next) renderScene(next); });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ENDINGS
+// ═══════════════════════════════════════════════════════════════
+function showEnding(key) {
+  var endings = {
+    covenant:{title:'The Renewed Covenant',text:"You renew the binding — but not the way it was done before. You sit across from the sleeping power and speak plainly: \"I am here by choice. I am not afraid of you. I am renewing what was agreed because the realm above is not ready for your presence, but I am telling you that readiness can be grown. Give me fifty years. Give me the chance to prepare them. And when I return — when we are both ready — we renegotiate.\"<br><br>The power is quiet for a long time. Then: \"Fifty years.\"<br><br>The binding settles into you like roots. You will always be able to hear it, distantly, the way the last heir could. It is not a prison. It is a conversation, paused.<br><br>You walk out of the chamber into morning light. You have fifty years. You have always been good with time.",ending:'You became the bridge between worlds — the first heir to renew the Pact not from fear but from the slow, hard patience of hope. The power beneath waits. You count the years.'},
+    release:{title:'The New Pact',text:"You release the binding — carefully, with conditions you spend two hours articulating, and the power listens to every word with the focused attention of something that has not been spoken to as an equal in three hundred years.<br><br>The conditions are: graduated emergence. No sudden presence. One region at a time, over decades, introduced gently, at the pace of human understanding rather than ancient impatience. An agreement of mutual restraint until trust is established.<br><br>The power agrees. \"No one,\" it says, \"has ever offered me conditions rather than a cage.\"<br><br>\"We all needed time,\" you say.",ending:'The realm never fully understands what you did or what changed. The world simply grows, over decades, slightly stranger and vastly more alive. You are credited with many things. Not this one. That is fine.'},
+    question:{title:'The Question Returned',text:"\"What do you want?\" you ask. \"Truly. Because no one has.\"<br><br>The silence that follows is the longest you have ever sat in. Then, slowly: \"I want to see the sky. I have been beneath it for three hundred years and I have never seen it. Not once.\"<br><br>You consider this. It is so simple that you almost cry.<br><br>\"Come with me,\" you say. \"Just — come up. Just to the surface. I will stand beside you and explain everything you see. And then we can decide together what comes next.\"<br><br>What follows takes the rest of your life and is the most important thing anyone ever did in the history of the realm. It starts with two people — one ancient, one young — walking toward a staircase in the quiet of early morning.<br><br>The sky, that day, is very blue.",ending:'You showed the ancient power the sky. The world changed the way things change when two very different kinds of being choose to be kind to each other. Slowly. Completely.'},
+    together:{title:'The Shared Reckoning',text:"\"Wait,\" you say. \"I need to bring the people I trust.\"<br><br>You go up. You find Tessaveth, who has been waiting in the corridor for an hour without knowing why. You find Orin and Emiel and, because you are feeling either bold or correct, you find Kastor Vael and tell him all of it in ninety seconds.<br><br>He listens. Then: \"You couldn't have handled this alone anyway.\" It is, you decide, his version of I'm with you.<br><br>You go down together, five people in a line through a door that was never meant to open more than once. The power takes one look at the crowd of you and says something that translates roughly as: \"This is not how this usually works.\"<br><br>\"No,\" you say. \"This is how it works now.\"",ending:'The binding was remade by a committee of five people who reached consensus anyway. This, it turned out, was the most powerful magic in three centuries. Not because of the spell — because of the agreement.'},
+  };
+  var e = endings[key]; if (!e) return;
+  document.getElementById('game-screen').innerHTML = '<div style="padding:60px 20px;"><div class="end-scroll"><div style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:8px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">◆ Epilogue ◆</div><div style="font-family:\'Uncial Antiqua\',cursive;font-size:2rem;color:var(--ink);margin-bottom:20px;">'+e.title+'</div><div style="height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);margin-bottom:24px;"></div><div style="font-style:italic;color:var(--ink2);line-height:2;font-size:1.02rem;margin-bottom:28px;">'+e.text+'</div><div style="height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);margin-bottom:20px;"></div><div style="font-family:\'Cinzel\',serif;font-size:0.75rem;letter-spacing:2px;color:var(--ink3);line-height:1.9;margin-bottom:30px;">'+e.ending+'</div><div style="background:rgba(184,134,11,0.05);border:1px solid var(--parch4);padding:16px;margin-bottom:24px;text-align:left;"><div style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:4px;color:var(--gold);text-align:center;margin-bottom:12px;">THE CHRONICLE OF '+C.name.toUpperCase()+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.82rem;color:var(--ink3);">'+Object.entries(C.stats).map(function(e){return '<div><span style="font-family:\'Cinzel\',serif;font-size:0.65rem;color:var(--ink4)">'+e[0]+'</span>: '+e[1]+'</div>';}).join('')+'</div><div style="margin-top:12px;font-size:0.82rem;color:var(--ink3);"><div style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:2px;color:var(--gold);margin-bottom:5px;">Traits Earned</div>'+C.traits.map(function(t){return '<span style="margin-right:8px;font-size:0.78rem">'+t.name+'</span>';}).join('')+'</div><div style="margin-top:10px;font-size:0.82rem;color:var(--ink3);"><div style="font-family:\'Cinzel\',serif;font-size:0.65rem;letter-spacing:2px;color:var(--gold);margin-bottom:5px;">Secrets Discovered</div>'+C.discoveries.map(function(d){return '<div style="margin-bottom:3px">· '+d.title+'</div>';}).join('')+'</div></div><button class="cr-btn" onclick="location.reload()">◆ &nbsp; Begin a New Chronicle &nbsp; ◆</button></div></div>';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STORY ADVANCEMENT
+// ═══════════════════════════════════════════════════════════════
+function getCurrentScene() {
+  if (_overrideScene) return _overrideScene;
+  if (currentArc==='infancy') return getInfancyScene(arcIndex);
+  if (currentArc==='childhood') return STORY_CHILDHOOD[arcIndex];
+  if (currentArc==='academy') return STORY_ACADEMY[arcIndex];
+  return null;
+}
+
+function advanceStory() {
+  var scene = getCurrentScene();
+
+  // Check for special onContinue hooks on the CURRENT scene
+  if (scene && scene.onContinue==='begin_childhood') { transitionToChildhood(); return; }
+  if (scene && scene.onContinue==='begin_duel_kastor') { beginDuel(); return; }
+
+  arcIndex++;
+  var next = getCurrentScene();
+  if (!next) {
+    if (currentArc==='childhood') { transitionToAcademy(); return; }
+    return;
+  }
+
+  // Skip over the duel scene placeholder if we somehow land on it
+  if (next.id==='first_duel' && C.choices['duel_kastor']) {
+    arcIndex++;
+    next = getCurrentScene();
+  }
+
+  // Handle dynamic graduation scene
+  if (next && next.isDynamic && next.dynamicKey==='graduation') {
+    renderScene(buildGraduationScene());
+    updateProgress();
+    return;
+  }
+
+  if (next) { renderScene(next); updateProgress(); }
+}
+
+function updateProgress() {
+  var totals = {infancy:4,childhood:6,academy:11};
+  var total = totals[currentArc]||1;
+  var pct = Math.round((arcIndex/total)*100);
+  var labels = {infancy:'Act I — Infancy',childhood:'Act II — Childhood',academy:'Act III — Academy'};
+  setArcProgress(pct, labels[currentArc]);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ERA TRANSITIONS
+// ═══════════════════════════════════════════════════════════════
+function transitionToChildhood() {
+  C.age=5; C.era='childhood';
+  showEraTransition('Act II','Childhood','The nursery walls expand. The world grows. You are five years old and the next ten years will make you into someone — the question is who.',function(){
+    currentArc='childhood'; arcIndex=0; C.age=6;
+    renderScene(STORY_CHILDHOOD[0]); updateProgress(); updateBanner();
+  });
+}
+
+function transitionToAcademy() {
+  C.age=16; C.era='academy';
+  showEraTransition('Act III','The Academy of Aelindra','Three years. Four Houses. Hundreds of students. One ancient secret beneath the stone. And you — walking through the gate for the first time — with ten years of preparation and the particular vertigo of having arrived somewhere you have dreamed about so long it no longer feels entirely real.',function(){
+    currentArc='academy'; arcIndex=0; C.age=16;
+    document.getElementById('spell-panel').classList.remove('hidden');
+    renderScene(STORY_ACADEMY[0]); updateProgress(); updateBanner();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STARTUP
+// ═══════════════════════════════════════════════════════════════
+var selLineage='noble', selSeason='summer';
+var _overrideScene = null; // holds dynamically-built scenes that bypass arcIndex
+
+document.querySelectorAll('#lineage-grid .lineage-card').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('#lineage-grid .lineage-card').forEach(function(o){o.classList.remove('sel');});
+    el.classList.add('sel'); selLineage=el.dataset.lineage;
+  });
+});
+document.querySelectorAll('[data-season]').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('[data-season]').forEach(function(o){o.classList.remove('sel');});
+    el.classList.add('sel'); selSeason=el.dataset.season;
+  });
+});
+
+function beginChronicle() {
+  var name = document.getElementById('pname').value.trim()||'Aelin';
+  initCharacter(name, selLineage, selSeason);
+  document.getElementById('title-screen').style.display='none';
+  document.getElementById('game-screen').style.display='block';
+  document.getElementById('era-banner').innerHTML='✦ <span id="era-label">Act I — Infancy</span> ✦ <span id="era-year">Year 0</span> <span id="era-loc">Kingdom of Aelindra</span>';
+  C.age=0; C.era='infancy'; currentArc='infancy'; arcIndex=0;
+  showEraTransition('Act I','Infancy','Every great life begins the same way. Not with a destiny — those are written later, in retrospect, by people who weren\'t there. It begins with a breath. A room. A name not yet earned.',function(){
+    renderScene(getInfancyScene(0)); updateProgress();
+  });
+}
+</script>
+</body>
+</html>
